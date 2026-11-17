@@ -5,8 +5,6 @@ Portable Agent Skill for generating, expanding, repairing, and explaining **Mini
 ## Structure
 
 - `SKILL.md` — Intent classifier, lazy reference router, and validation workflow
-- `SPEC.md` — Maintenance contract, scope boundaries, and acceptance gates
-- `SOURCES.md` — Source provenance and 6-axis coverage matrix
 - `references/` — Modular MiniMax H3 timeline, audio, expansion, standalone, keyframe/scene/storyboard, multi-reference/transfer, repair/Q&A, and worked examples
 - `scripts/validate_h3_prompt.py` — Zero-dependency deterministic Python validator (`--help` for CLI options)
 - `scripts/test_validate_h3_prompt.py` — Pytest suite for validator contracts
