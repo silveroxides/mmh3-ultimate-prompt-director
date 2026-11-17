@@ -182,7 +182,7 @@ N/A"""
 <Video 1> supplies walking choreography, camera movement, timing, and plaza progression.
 <Audio 1> is the full synchronized soundtrack copied from <Video 1>.
 summary:
-[video editing + reference generation + audio reuse] The target video is an edited version of <Video 1> where both lead walkers are replaced by <Subject 1> from <Picture 1> and <Subject 2> from <Picture 2> while retaining the plaza camera motion and <Audio 1> soundtrack.
+[video editing + reference generation + audio reuse] The target video is an edited version of <Video 1> where two lead walkers are replaced by <Subject 1> from <Picture 1> and <Subject 2> from <Picture 2> while retaining the plaza camera motion and <Audio 1> soundtrack.
 retention_analysis:
 <Subject 1>: attribute_transfer - visual identity and blazer from <Picture 1> transferred onto <Video 1> motion
 <Subject 2>: attribute_transfer - visual identity and trench coat from <Picture 2> transferred onto <Video 1> motion

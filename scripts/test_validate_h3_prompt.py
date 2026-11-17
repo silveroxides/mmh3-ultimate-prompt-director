@@ -288,11 +288,21 @@ N/A"""
 
 
 def test_stage8_mode_flags_vague_video_ban_and_audio_consistency():
-    # Reject vague video references when no <Video N> tag exists
+    # Reject vague video/guide references when no <Video N> tag exists + pronouns in summary
     vague_leak = VALID_STANDALONE_4.replace("neon alley", "guide video alley")
     res_vague = validate_prompt(vague_leak, mode="standalone_4")
     assert not res_vague.valid
     assert any("vague video reference" in e for e in res_vague.errors)
+
+    bare_guide_leak = VALID_STANDALONE_5.replace("to deliver a sealed metal tube", "mimicking the routine shown in the guide")
+    res_bare_guide = validate_prompt(bare_guide_leak, mode="standalone_5")
+    assert not res_bare_guide.valid
+    assert any("vague video reference" in e for e in res_bare_guide.errors)
+
+    sum_pronoun_leak = VALID_STANDALONE_5.replace("before dawn.", "as they greet the dawn.")
+    res_sum_p = validate_prompt(sum_pronoun_leak, mode="standalone_5")
+    assert not res_sum_p.valid
+    assert any("'summary:' uses banned pronoun" in e for e in res_sum_p.errors)
 
     # Reject <d> inside overall_soundscape and warn on missing [SPEECH] / [MUSIC]
     bad_soundscape = VALID_STANDALONE_4.replace(

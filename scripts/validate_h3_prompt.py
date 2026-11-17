@@ -54,7 +54,7 @@ STORYBOARD_LEAK_RE = re.compile(
     re.I,
 )
 VAGUE_VIDEO_RE = re.compile(
-    r"\b(?:source\s+video|guide\s+video|original\s+video|reference\s+video|pre-existing\s+video|story\s+guide|input\s+video|the\s+footage)\b",
+    r"\b(?:source\s+video|guide\s+video|original\s+video|reference\s+video|pre-existing\s+video|story\s+guide|input\s+video|the\s+footage|the\s+guide|in\s+the\s+guide|from\s+the\s+guide|shown\s+in\s+the\s+guide)\b",
     re.I,
 )
 VIDEO_TAG_RE = re.compile(r"<Video\s+\d+>")
@@ -278,6 +278,10 @@ def validate_prompt(
                         errors.append("Summary prefix must not include 'keyframe completion' without a concrete keyframe anchor.")
             if MEDIA_TAG_RE.search(sum_text):
                 warnings.append("Media tag (<Picture/Video/Audio N>) appears in 'summary:'; keep media provenance in subject_definitions/retention_analysis unless explicitly requested.")
+            if defined_subjects:
+                sum_pm = PRONOUN_BANS_RE.findall(sum_text)
+                if sum_pm:
+                    errors.append(f"'summary:' uses banned pronoun/group word(s) {sorted(set(x.lower() for x in sum_pm))} with defined <Subject N> tags.")
             words = len(sum_text.split())
             if strict_word_counts and words < 50:
                 warnings.append(f"'summary:' has {words} words (target >= 50 words for full 3-5 sentence summary).")
