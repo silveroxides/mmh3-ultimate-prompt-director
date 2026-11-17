@@ -54,7 +54,7 @@ STORYBOARD_LEAK_RE = re.compile(
     re.I,
 )
 VAGUE_VIDEO_RE = re.compile(
-    r"\b(?:source\s+video|guide\s+video|original\s+video|reference\s+video|pre-existing\s+video|story\s+guide|input\s+video|the\s+footage|the\s+guide|in\s+the\s+guide|from\s+the\s+guide|shown\s+in\s+the\s+guide)\b",
+    r"\b(?:source\s+video|guide\s+video|original\s+video|reference\s+video|pre-existing\s+video|story\s+guide|input\s+video|the\s+footage|the\s+guide|in\s+the\s+guide|from\s+the\s+guide|shown\s+in\s+the\s+guide|mimicking)\b",
     re.I,
 )
 VIDEO_TAG_RE = re.compile(r"<Video\s+\d+>")

@@ -299,6 +299,11 @@ def test_stage8_mode_flags_vague_video_ban_and_audio_consistency():
     assert not res_bare_guide.valid
     assert any("vague video reference" in e for e in res_bare_guide.errors)
 
+    mimic_leak = VALID_STANDALONE_5.replace("to deliver a sealed metal tube", "while mimicking someone off camera")
+    res_mimic = validate_prompt(mimic_leak, mode="standalone_5")
+    assert not res_mimic.valid
+    assert any("vague video reference" in e for e in res_mimic.errors)
+
     sum_pronoun_leak = VALID_STANDALONE_5.replace("before dawn.", "as they greet the dawn.")
     res_sum_p = validate_prompt(sum_pronoun_leak, mode="standalone_5")
     assert not res_sum_p.valid

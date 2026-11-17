@@ -11,6 +11,7 @@ Envelope: `subject_definitions:` -> `summary:` -> `retention_analysis:` -> `deta
 - **No Range Shorthand**: List every Picture individually (`<Picture 1>, <Picture 2>, and <Picture 3>`), never `<Picture 1>-<Picture 3>` or `through`.
 - **Independent Namespaces**: `<Picture N>`, `<Video N>`, and `<Audio N>` indices are independent; matching numbers do not imply shared origin. A `<Video N>` with audio does **not** create `<Audio N>` unless an audio input/track is actually attached/exposed.
 - **Keep Meaning Stable**: Never change what a `<Subject N>`, `<Picture N>`, `<Video N>`, or `<Audio N>` represents across the 6 fields.
+- **Strict `<Video N>` & Full Anchors**: Only write `<Video N>` when a video is actually attached AND named by the user—never write `source video`, `guide video`, `original video`, `reference video`, `input video`, `story guide`, `the guide`, `in the guide`, `shown in the guide`, or `mimicking`. Describe each `<Subject N>` in full head-to-toe detail in `subject_definitions:` and on first appearance in `Timeline:`.
 - **Where Citations Live**: Cite `<Picture N>` provenance in `subject_definitions:` (and standalone `<Picture N>` only if it holds a concrete frame/planning role) and track in `retention_analysis:`. Never cite `<Picture N>`/`<Video N>`/`<Audio N>` inside `summary:` unless explicitly requested.
 
 ---

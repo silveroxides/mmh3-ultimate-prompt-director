@@ -42,6 +42,20 @@ A low muted cello opens beneath the rain before giving way to sparse solo piano 
     res5 = validate_prompt(p_5, mode="standalone_5", duration=7.0, strict_word_counts=True)
     assert res5.valid, res5.errors
 
+    # SCENE_IMAGE_T2VA standalone (4-field visual seed -> zero media tags, full subject & scene grounding)
+    p_scene_t2va = """integrated_multimodal_description:
+Timeline:
+[00.00s-05.00s]:
+[VISUAL]: [Shot 1] Wide Push In glides across a misty pine valley at dawn in crisp live action cinema as a lone hiker in a burnt orange windbreaker, grey backpack, and muddy boots steps carefully over wet granite boulders beside a foaming mountain creek while cool morning fog drifts between tall evergreen trunks.
+[SOUNDS]: Rushing cold creek water over granite boulders and damp boot steps on moss.
+[MUSIC]: Gentle acoustic guitar fingerpicking sustains a quiet, open dawn mood.
+overall_soundscape:
+Steady mountain creek rush and damp boot steps on mossy granite fill the quiet alpine valley.
+non_diegetic_music:
+Soft acoustic guitar fingerpicking plays gently beneath the mountain stream."""
+    res_sc = validate_prompt(p_scene_t2va, mode="standalone_4", duration=5.0)
+    assert res_sc.valid, res_sc.errors
+
     # Storyboard T2VA standalone (4-field) + --storyboard + in-place replacement (no swap prose)
     p_story_t2va = """integrated_multimodal_description:
 Timeline:
@@ -138,6 +152,27 @@ non_diegetic_music:
 <Audio 1> provides the complete synchronized rhythmic soundtrack throughout the clip."""
     res_ac = validate_prompt(p_var_ac, mode="reference_6", duration=4.0, require_retention=True, forbid_keyframe_tag=True)
     assert res_ac.valid, res_ac.errors
+
+    # Variant B (Vocal timbre without <Video N> -> audio reference + reference <Audio 1>, no signal copy)
+    p_var_b = """subject_definitions:
+<Subject 1> is a radio host in a charcoal turtleneck and brass headphones seated inside a warm wood-paneled studio.
+<Audio 1> is the vocal-timbre reference for <Subject 1> (S1).
+summary:
+[reference generation + audio reference] <Subject 1> leans calmly toward a ribbon microphone in warm amber desk light and delivers a measured late-night weather bulletin while rain taps against studio glass in crisp live action cinema.
+retention_analysis:
+<Audio 1>: reference - calm baritone timbre and unhurried cadence guide <Subject 1> (S1) without copying source audio
+detailed_description:
+Timeline:
+[00.00s-05.00s]:
+[VISUAL]: [Shot 1] Medium Close Up glides smoothly past a glowing analog VU meter toward <Subject 1> seated upright in the charcoal turtleneck, right hand adjusting the brass headphone band before <Subject 1> leans smoothly toward the brushed steel ribbon microphone while amber desk light warms the acoustic wood slats behind.
+[SPEECH]: <Subject 1> (S1) <d>[English] Coastal winds ease past midnight as clear skies settle over the harbor. </d>
+[SOUNDS]: Soft rain patter against studio window glass and faint desk chair creak.
+overall_soundscape:
+Gentle window rain patter and subtle wooden chair movement frame the studio broadcast without copying <Audio 1>.
+non_diegetic_music:
+N/A"""
+    res_b = validate_prompt(p_var_b, mode="reference_6", duration=5.0, require_retention=True, forbid_keyframe_tag=True)
+    assert res_b.valid, res_b.errors
 
 
 def test_mixed_timeline_samples_and_multi_subject_attr_transfer():
