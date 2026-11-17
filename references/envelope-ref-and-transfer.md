@@ -57,16 +57,17 @@ When the user supplies ordered timeline images (e.g., `Shot N at timestamp` or `
 ---
 
 ## 5. Video Attribute / Motion Transfer (3 Audio Modes)
-Use when transferring identity/appearance from `<Picture 1>` onto a subject's motion, choreography, camera, and timing from `<Video 1>`:
+Use when transferring identity/appearance from `<Picture N>` (`<Picture 1>`, or multiple `<Picture N>` for multi-subject replacement) onto a subject's motion, choreography, camera, and timing from `<Video 1>`:
 
-- **Replacement Subject Rules (All 3 Modes)**:
-  - Define `<Subject 1>` statically using `<Picture 1>` appearance + `<Video 1>` motion role. **Never** define, name, or describe the replaced original `<Video 1>` subject anywhere in `subject_definitions:`, `retention_analysis:`, or `Timeline:`, and never narrate an on-screen swap unless requested.
-  - Define every **non-replaced** background/secondary person in `<Video 1>` as their own `<Subject 2>`, `<Subject 3>`, ... and attribute any dialogue they speak to their own `<Subject N> (Sx)` tag (never to `<Subject 1>`).
-  - Keep `<Video 1>` retention concise (`<Video 1>: partially_preserved - camera movement, choreography, timing, and scene progression retained with subject replaced by <Subject 1>`, or `attribute_transfer` when only motion/camera transfers without source scene retention).
+- **Replacement & Retention Rules (All Modes)**:
+  - Define each replaced `<Subject N>` statically using `<Picture N>` appearance + `<Video 1>` motion role. **Never** define, name, or describe replaced original `<Video 1>` subject(s) anywhere in `subject_definitions:`, `retention_analysis:`, or `Timeline:`, and never narrate an on-screen swap unless requested.
+  - Define every **non-replaced** background/secondary person in `<Video 1>` as their own `<Subject N>` (`<Subject 2>`, ...) and attribute any dialogue they speak strictly to their own `<Subject N> (Sx)` tag (never to a replaced `<Subject 1>`).
+  - Emit both retention lines cleanly: `<Subject N>: attribute_transfer - visual identity and appearance from <Picture N> transferred onto <Video 1> motion` and `<Video 1>: partially_preserved - camera movement, choreography, timing, and scene progression retained with subject replaced by <Subject N>` (or `<Video 1>: attribute_transfer` when only motion/camera transfers without source scene retention).
+  - Do **not** invent `[SOUNDS]` not verifiably produced by a subject/action (`[SOUNDS]` is never for music or instruments). Never place theme-music or uncertain/nonsensical lyrics in `[SPEECH]` (`[SPEECH]` is only for an active `<Subject N>` speaking/singing; omit uncertain spans or mark `[unclear]` on verbatim copied audio).
 
 | Audio Mode | `summary:` Prefix | `subject_definitions:` `<Audio 1>` | `retention_analysis:` `<Audio 1>` | `Timeline:` & `non_diegetic_music:` |
 |---|---|---|---|---|
-| **1. Audio Copy** | `[video editing + reference generation + audio reuse]` | `<Audio 1> is the full synchronized soundtrack copied from <Video 1>.` | `<Audio 1>: fully_copy - source audio track is copied entirely` | Emit `[MUSIC]: <Audio 1>`. Transcribe verbatim spoken/sung lyrics from `<Audio 1>` into `[SPEECH]`. Start `non_diegetic_music:` with `<Audio 1>`. |
+| **1. Audio Copy** | `[video editing + reference generation + audio reuse]` | `<Audio 1> is the full synchronized soundtrack copied from <Video 1>.` | `<Audio 1>: fully_copy - source audio track is copied entirely` (or `partially_copy` if selected segments/layers) | Emit `[MUSIC]: <Audio 1>`. Transcribe verbatim spoken/sung lyrics by active `<Subject N>` from `<Audio 1>` into `[SPEECH]` (omit uncertain lyrics; never emit theme-music lyrics). Start `non_diegetic_music:` with `<Audio 1>`. |
 | **2. Audio Timbre** | `[video editing + reference generation + audio reference]` | `<Audio 1> is the vocal-timbre reference for <Subject 1> (S1).` | `<Audio 1>: reference - vocal timbre and delivery guide speech of <Subject 1> (S1) without copying audio signal` | `<Subject 1> (S1)` follows `<Audio 1>` voice traits without copying audio wording/signal. Target music described normally or `N/A`. |
 | **3. No Audio** | `[video editing + reference generation]` | Omit `<Audio N>` completely. | Omit `<Audio N>` completely. | Omit `[SPEECH]` unless silent-video subjects are given new/non-replaced speaker lines; `non_diegetic_music: N/A`. |
 
