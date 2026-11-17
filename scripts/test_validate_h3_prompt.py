@@ -144,7 +144,7 @@ def test_documented_examples_validate():
 
     examples_path = Path(__file__).resolve().parents[1] / "references" / "examples.md"
     blocks = re.findall(r"```text\r?\n(.*?)\r?\n```", examples_path.read_text(encoding="utf-8"), re.S)
-    assert len(blocks) == 3
+    assert len(blocks) == 4
 
     ex1 = validate_prompt(blocks[0], mode="standalone_4", duration=6.0)
     assert ex1.valid, ex1.errors
@@ -154,6 +154,9 @@ def test_documented_examples_validate():
 
     ex3 = validate_prompt(blocks[2], mode="reference_6", duration=4.0, require_retention=True, forbid_keyframe_tag=True)
     assert ex3.valid, ex3.errors
+
+    ex4 = validate_prompt(blocks[3], mode="reference_6", duration=5.0, require_retention=True, forbid_keyframe_tag=True)
+    assert ex4.valid, ex4.errors
 
 
 def test_expected_segments_and_literal_starts():
@@ -314,6 +317,7 @@ def test_stage8_mode_flags_vague_video_ban_and_audio_consistency():
     import re
 
     blocks = re.findall(r"```text\r?\n(.*?)\r?\n```", examples_path.read_text(encoding="utf-8"), re.S)
+    assert len(blocks) == 4
     ex2 = validate_prompt(blocks[1], mode="reference_6", duration=5.0, require_retention=True, fl2va=True)
     assert ex2.valid, ex2.errors
     ex3 = validate_prompt(blocks[2], mode="reference_6", duration=4.0, require_retention=True, audio_mode="copy", video_editing=True)

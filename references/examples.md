@@ -88,7 +88,39 @@ non_diegetic_music:
 
 ---
 
-## Example 4: Anti-Pattern Repair (Before -> After)
+## Example 4: Video Continuation From Prior Clip With Vocal/Energy Reference (6-Field)
+**User Goal**: *"Write a 5s continuation clip starting directly from the ending of Video 1, matching Audio 1's industrial rhythm without copying the raw audio track."*
+
+```text
+subject_definitions:
+<Subject 1> is the courier in a soaked dark coat and boots continuing from <Video 1>.
+<Video 1> is the prior rainy rooftop chase clip whose ending sprint momentum, camera tracking velocity, and wet alley atmosphere continue directly.
+<Audio 1> is the driving industrial drum track used as rhythmic energy reference.
+summary:
+[video continuation + audio reference] <Subject 1> continues sprinting seamlessly out of the ending lean of <Video 1>, vaulting a steel stairwell barrier onto an upper landing while rain lashes damp brick under flickering neon tubes in gritty live action cinema.
+retention_analysis:
+<Video 1>: partially_preserved - ending pose, camera momentum, and rainy rooftop setting continue directly into the opening beat
+<Subject 1>: fully_preserved - courier appearance and soaked dark coat continuity remain intact across the continued sprint
+<Audio 1>: reference - driving industrial percussion tempo guides target music energy without copying raw audio signal
+detailed_description:
+Timeline:
+[00.00s-02.60s]:
+[VISUAL]: [Shot 1] Tracking Shot continues directly from the forward lean at the end of <Video 1> as <Subject 1> drives wet boots across cracked concrete, leaping cleanly onto a rusted stairwell landing while rain streaks past warm doorway light and the soaked coat hem whips backward.
+[SOUNDS]: Heavy splashing boot impacts on concrete, metallic rail grab, and steady driving rainfall hiss.
+[MUSIC]: Pounding industrial snare and low distorted synthesizer bass build steadily behind the sprint.
+[02.60s-05.00s]:
+[VISUAL]: Push In tightens behind the shoulders of <Subject 1> wrenching open a heavy steel roof hatch, pale fluorescent light spilling over rain slick shoulders as <Subject 1> ducks inside and slams the hatch downward.
+[SOUNDS]: Heavy steel hinge screech, rushing stairwell draft, and resounding metal latch slam.
+[MUSIC]: Industrial drums hit a sharp final accent right as the hatch shuts.
+overall_soundscape:
+Driving rooftop rainfall, wet boot impacts, metallic rail grabs, and the heavy steel hatch slam carry the continuous escape.
+non_diegetic_music:
+A driving industrial drum and low distorted synthesizer pulse echoes the rhythmic energy of <Audio 1> without copying raw stems.
+```
+
+---
+
+## Example 5: Anti-Pattern Repair (Before -> After)
 **Broken Input**:
 - Uses `both hands`, `<Subject 1>'s jacket`, `they`, unpadded `[3.00s-6.00s]`, empty `[SPEECH]: None`, and `<Picture 1>` leaked into a standalone prompt.
 
