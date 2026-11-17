@@ -1,4 +1,4 @@
-# minimax-h3-prompting Specification
+# MMH3 Ultimate Prompt Director Specification
 
 ## Intent
 
