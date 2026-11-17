@@ -30,12 +30,12 @@ Generate accurate, one-shot MiniMax H3 video-audio prompts or answer MiniMax H3 
    - **Duration & Segment Count Supplied**: Lock user-specified duration, timestamp precision (`00.00s` or `00.000s`), and any explicit segment count or `Shot N at timestamp` starts literally without asking.
    - **Video Media Supplied (`<Video N>`)**: Derive duration and pacing from `<Video N>`; ask only if audio/retention roles are ambiguous.
    - **Duration Supplied Without Segment Count**: Lock the requested duration verbatim and compute segment count adaptively from meaningful action, camera, speech, or sound changes (never fixed intervals).
-   - **Duration (and Segment Count) Omitted With No `<Video N>`**: Ask the user once before drafting—offering **both** exact H3 architecture-matched lengths (`5 + 17k` frames at `24 fps`, `+0.70833s` step: e.g., `5.17s` / `124f`, `5.88s` / `141f`, `6.58s` / `158f`, `7.29s` / `175f`, `8.00s` / `192f`, `10.13s` / `243f`; run `python scripts/validate_h3_prompt.py --list-h3-lengths` if needed) **and** complexity-matched duration ranges tailored to the request, plus optional segment count (defaulting to adaptive beats). Combine with any media-role ambiguity in the same concise question.
+   - **Duration (and Segment Count) Omitted With No `<Video N>`**: Ask the user once before drafting, offering **both** exact H3 architecture-matched lengths (`5 + 17k` frames at `24 fps`, `+0.70833s` step: e.g., `5.17s` / `124f`, `5.88s` / `141f`, `6.58s` / `158f`, `7.29s` / `175f`, `8.00s` / `192f`, `10.13s` / `243f`; run `python scripts/validate_h3_prompt.py --list-h3-lengths` if needed) **and** complexity-matched duration ranges tailored to the request, plus optional segment count (defaulting to adaptive beats). Combine with any media-role ambiguity in the same concise question.
 4. **Decide Delivery Mode**:
    - **Standalone text-only** (H3 receives text only): route to `references/envelope-standalone.md` (`4-field` or `5-field`).
    - **Media-attached / General `any2va` / Transfer / Continuation**: route to `references/envelope-keyframes-scene.md` or `references/envelope-ref-and-transfer.md` (`6-field`).
 5. **Infer vs Clarify (`references/user-interaction-guide.md`)**:
-   - Infer creative details (camera, lighting, soundscape, music, dialogue lines when asked without script) and proceed **one-shot** whenever structural roles are clear—never ask unnecessary questions or impose arbitrary restrictions.
+   - Infer creative details (camera, lighting, soundscape, music, dialogue lines when asked without script) and proceed **one-shot** whenever structural roles are clear; never ask unnecessary questions or impose arbitrary restrictions.
    - Ask concise, jargon-free questions **only** when unresolvable structural ambiguity would wire the wrong mode (e.g., multiple unlabeled images with diverging roles, or unclear copy vs timbre vs silent audio on `<Video N>`).
 
 ## Stage 2: Load Matching References

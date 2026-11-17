@@ -1,6 +1,6 @@
 # User Interaction, Clarification & Multi-Turn Refinement
 
-Use this guide to handle zero-knowledge user requests smoothly—resolving duration and segment structure when no upstream node supplies them, delivering one-shot results whenever intent is clear, asking plain-English questions only when structural choices diverge, explaining media wiring, and supporting multi-turn edits.
+Use this guide to handle zero-knowledge user requests smoothly: resolving duration and segment structure when no upstream node supplies them, delivering one-shot results whenever intent is clear, asking plain-English questions only when structural choices diverge, explaining media wiring, and supporting multi-turn edits.
 
 ## 0. Duration & Segment Count Ownership (Outside Node Workflows)
 In automated node workflows, total duration and optional segment timestamps are handed in upfront. With a zero-knowledge user in chat, **you** must resolve both cleanly without inventing arbitrary constraints:
@@ -8,7 +8,7 @@ In automated node workflows, total duration and optional segment timestamps are 
 - **When `<Video N>` Media Is Supplied**: Derive duration and visual pacing directly from `<Video N>` (ask only if audio/retention roles are unclear).
 - **When Duration Is Supplied Without Segment Count**: Use that duration verbatim and compute segment count adaptively from real changes in action, camera, speech, sound, or foreground priority (never fixed equal slices). Note in 1 line below the prompt that they can specify an exact segment count or `Shot N at timestamp` starts if needed.
 - **When Duration (and Segment Count) Is Omitted With No `<Video N>`**: Ask the user once before drafting, offering:
-  1. **Exact H3 Architecture Lengths (`24 fps`, `5 + 17k` frames, `+17f ≈ +0.70833s` per step)** — e.g.:
+  1. **Exact H3 Architecture Lengths (`24 fps`, `5 + 17k` frames, `+17f ≈ +0.70833s` per step)** (e.g.):
      - `73f = 3.042s` (`3.04s`) · `90f = 3.750s` (`3.75s`) · `107f = 4.458s` (`4.46s`)
      - `124f = 5.167s` (`5.17s`, H3 single-chunk default) · `141f = 5.875s` (`5.88s`) · `158f = 6.583s` (`6.58s`)
      - `175f = 7.292s` (`7.29s`) · `192f = 8.000s` (`8.00s`) · `209f = 8.708s` (`8.71s`)
@@ -24,7 +24,7 @@ Never interrogate a user over creative details you can infer well, and never imp
 | User Input Situation | Action | Plain-English Handling |
 |---|---|---|
 | Brief text idea with **no duration**, no segment count, and no `<Video N>` (*"cat knocks over coffee mug"*) | **Ask once for length/range (+ segments)** | Present 2–3 complexity-matched duration ranges **plus** exact H3 `5 + 17k` (`24 fps`) length options, and note adaptive beat-based segments as default unless they want a specific segment count. Infer style, camera, and soundscape automatically once they pick length. |
-| User supplies duration (`"6s"`, `"8.000s"`, `"124 frames"`) without segment count | **Proceed one-shot (adaptive segments)** | Use exact duration (snapping frame count only if user asks for H3-aligned seconds). Divide into adaptive beat-based segments at real action/camera/speech/sound shifts—never fixed intervals. |
+| User supplies duration (`"6s"`, `"8.000s"`, `"124 frames"`) without segment count | **Proceed one-shot (adaptive segments)** | Use exact duration (snapping frame count only if user asks for H3-aligned seconds). Divide into adaptive beat-based segments at real action/camera/speech/sound shifts, never fixed intervals. |
 | User supplies explicit segment count or `Shot N at timestamp` starts (with duration) | **Preserve literally** | Keep the user's exact segment count and start timestamps literally (`prev_end == next_start`; final `END` = total duration). |
 | User requests any explicit duration for one prompt, or asks for chained clips | **Honor user scope directly** | Generate a single timeline at the exact requested duration without inventing duration caps; use `video continuation` when the user asks for chained clips or continuing from a prior `<Video N>`. |
 | User says *"add dialogue"* without providing lines | **Infer & deliver one-shot** | Write concise, context-fitting lines placed at natural pauses; keep `(Sx) <d>[Lang] ... </d>` syntax clean. |
@@ -43,7 +43,7 @@ Media Wiring:
 - Audio 1 -> Voice tone reference only (audio signal is not copied)
 ```
 
-If the user asked for a **standalone text-only prompt** derived from a seed image or storyboard, explicitly state below the prompt: *"Do not attach the seed image/storyboard to MiniMax H3—paste the prompt text alone."*
+If the user asked for a **standalone text-only prompt** derived from a seed image or storyboard, explicitly state below the prompt: *"Do not attach the seed image/storyboard to MiniMax H3; paste the prompt text alone."*
 
 ## 3. Multi-Turn Refinement & Follow-Up Edits
 When the user iterates on an already-generated prompt:
@@ -51,5 +51,5 @@ When the user iterates on an already-generated prompt:
 2. **Audio / Dialogue / Music Edit** (*"remove dialogue"*, *"switch to upbeat jazz"*, *"add a voiceover"*): Delete `[SPEECH]` completely if removed (never leave placeholders), update `(Sx)` numbering in actual vocal order if speakers shift, and keep `[MUSIC]` + `non_diegetic_music:` synchronized.
 3. **Style Override** (*"make it 2D anime instead"*): Update governing style in `summary:` (or `[Shot 1]` for 4-field) while preserving subject identity and physical continuity.
 4. **Standalone <-> Reference Conversion** (*"now I want to attach Image 1 as the starting frame"*): Upgrade envelope cleanly (`4/5-field` -> `6-field` with `subject_definitions:`, `[keyframe completion]`/`[reference generation]`, `retention_analysis:`, and `<Picture 1>` anchoring), or strip all media tags and `retention_analysis:` when converting to text-only.
-5. **Continue Into Next Clip** (*"write the next 6s clip continuing right after this one"*): Either draft a fresh standalone/first-frame continuation starting from the final state of clip 1, or—when continuing from `<Video 1>`—switch to `video continuation` in `envelope-ref-and-transfer.md`.
+5. **Continue Into Next Clip** (*"write the next 6s clip continuing right after this one"*): Either draft a fresh standalone/first-frame continuation starting from the final state of clip 1, or, when continuing from `<Video 1>`, switch to `video continuation` in `envelope-ref-and-transfer.md`.
 6. **Always Re-Validate**: Run `scripts/validate_h3_prompt.py` after every follow-up edit before replying.

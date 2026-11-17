@@ -9,7 +9,7 @@ Use this guide whenever the user provides a brief, incomplete, or high-level pro
 
 ## 2. Density & Word-Count Targets
 Match richness to the user's request (`Overarching Principle`: keep concise if the user explicitly requests simplicity/brevity; dialogue-dense clips prioritize accurate spoken timing). By default for rich cinematic generation (especially `any2va` scene/storyboard and multi-reference prompts):
-- **`summary:`**: `3 to 5` full English sentences, **50+ words**. Cover completed premise, main subjects, narrative arc, and governing visual style, medium, era, and subject presentation — without retelling timestamp-by-timestamp beats.
+- **`summary:`**: `3 to 5` full English sentences, **50+ words**. Cover completed premise, main subjects, narrative arc, and governing visual style, medium, era, and subject presentation without retelling timestamp-by-timestamp beats.
 - **`detailed_description:`**: `350 to 500` words across the full timeline (scaling naturally with duration and scene complexity).
 - **Per-Segment `[VISUAL]`**: `3 to 5` concrete sentences per block (**70+ words minimum, 75–120 words target**).
 
@@ -23,7 +23,7 @@ Transform static ideas or frames into continuous live action:
 ## 4. Style, Lighting & Camera Inference
 - **Governing Style Authority**: Apply any user-requested visual style, medium, or era across the entire target video; otherwise preserve the supplied image/video medium naturally. Never mix photographic lens jargon into non-photographic 2D/painterly art unless requested, and never invent physical camera hardware unless visible or asked for.
 - **Where Style Lives**: Establish global visual style, color grade, and film/lens feel in `summary:` and the opening `[Shot 1]`, not redundantly in every later `[VISUAL]` line. Inside later blocks, mention lighting or color only when it dynamically changes (e.g., neon flicker, shadow sweep, door opening).
-- **Pacing Across Duration**: Vary intensity across blocks—build escalation, peak impact, or quiet breathing room rather than maxing every channel in every interval.
+- **Pacing Across Duration**: Vary intensity across blocks, building escalation, peak impact, or quiet breathing room rather than maxing every channel in every interval.
 
 ## 5. Audio Expansion From Visuals
 - Infer realistic `[SOUNDS]` from every physical motion and surface (footsteps on wet stone, fabric rustle, cloth slap, breath, water splash, door latch).

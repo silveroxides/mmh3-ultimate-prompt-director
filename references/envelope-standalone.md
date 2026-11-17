@@ -1,6 +1,6 @@
 # Standalone Prompts (Text-Only Delivery to MiniMax H3)
 
-Use this reference when MiniMax H3 receives **only the prompt text**—either from a pure text request, or when supplied images/storyboards/clips are visual inspiration/seeds used solely while drafting the prompt (never attached to MiniMax H3 downstream).
+Use this reference when MiniMax H3 receives **only the prompt text**, either from a pure text request or when supplied images/storyboards/clips are visual inspiration/seeds used solely while drafting the prompt (never attached to MiniMax H3 downstream).
 
 ## 1. Choose the Standalone Envelope
 

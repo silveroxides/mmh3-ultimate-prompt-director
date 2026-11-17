@@ -18,27 +18,27 @@ Apply these invariants across every MiniMax H3 prompt regardless of mode.
 - **Opening & Cuts**: Put `[Shot 1]` immediately after `[VISUAL]:` in the first segment. Add sequential `[Shot 2]`, `[Shot 3]` **only** when an instantaneous hard camera cut or discontinuous scene/perspective jump occurs. On a single unbroken take, use only `[Shot 1]` at `00.00s` and omit `[Shot N]` from later segments.
 - **Natural Transitions**: Prefer continuous camera motion over cuts for slight angle or distance changes. Use cross-dissolve, fade, or wipe only when explicitly needed.
 - **Camera Motion & Framing Vocabulary**: Describe camera motion naturally inside `[VISUAL]`. Pair framing/angle geometry (`wide shot`, `close up`, `low angle`, `overhead`, `crane shot`, etc.) with standard motion types:
-  - `Static Shot` — camera position and lens remain still.
-  - `Zoom In` / `Zoom Out` — focal length changes while camera stays stationary.
-  - `Push In` / `Pull Out` — camera body moves forward or backward.
-  - `Pan Left` / `Pan Right` — camera stays fixed, pivots horizontally.
-  - `Tilt Up` / `Tilt Down` — camera stays fixed, pivots vertically.
-  - `Truck Left` / `Truck Right` — complete camera translates horizontally.
-  - `Pedestal Up` / `Pedestal Down` — complete camera moves vertically.
-  - `Tracking Shot` — camera moves alongside a moving subject.
-  - `Dolly Shot` — camera moves toward, away from, or alongside subject for depth.
-  - `Arc Shot` — camera moves in an arc around the subject.
-  - `Shake Slightly` / `Shake Strongly` — slight or strong handheld/impact shake.
-  - `Roll Clockwise` / `Roll Counterclockwise` — camera rolls around lens axis.
-  - `POV` — camera presents a subject's first-person viewpoint (state whose viewpoint it is only when established by input or request; never assign first-person perspective to an external viewpoint).
+  - `Static Shot`: camera position and lens remain still.
+  - `Zoom In` / `Zoom Out`: focal length changes while camera stays stationary.
+  - `Push In` / `Pull Out`: camera body moves forward or backward.
+  - `Pan Left` / `Pan Right`: camera stays fixed, pivots horizontally.
+  - `Tilt Up` / `Tilt Down`: camera stays fixed, pivots vertically.
+  - `Truck Left` / `Truck Right`: complete camera translates horizontally.
+  - `Pedestal Up` / `Pedestal Down`: complete camera moves vertically.
+  - `Tracking Shot`: camera moves alongside a moving subject.
+  - `Dolly Shot`: camera moves toward, away from, or alongside subject for depth.
+  - `Arc Shot`: camera moves in an arc around the subject.
+  - `Shake Slightly` / `Shake Strongly`: slight or strong handheld/impact shake.
+  - `Roll Clockwise` / `Roll Counterclockwise`: camera rolls around lens axis.
+  - `POV`: camera presents a subject's first-person viewpoint (state whose viewpoint it is only when established by input or request; never assign first-person perspective to an external viewpoint).
 - Add `slow` or `fast` only when speed materially affects the shot; omit normal speed.
 
 ## 4. Channels, Foreground Priority & Mixing
 Each timestamp block follows this exact channel order:
-1. `[VISUAL]:` (required) — concrete visual action, subject positioning, start-to-end trajectories, environment reaction, lighting shifts, and camera movement. Never lapse into static frame description or repeat global style specs in every block.
-2. `[SPEECH]:` (conditional) — omit the entire line whenever no speech or character-sung vocal occurs in that block. Never write placeholders (`None`, `N/A`, `No speech`).
-3. `[SOUNDS]:` (recommended whenever physical/ambient sound exists) — non-musical physical sound effects, environmental ambience, and animal/creature/nonverbal human sounds.
-4. `[MUSIC]:` (conditional) — segment-specific diegetic or score cue. Omit when no music is specific to that segment. Always place after `[SOUNDS]`.
+1. `[VISUAL]:` (required): concrete visual action, subject positioning, start-to-end trajectories, environment reaction, lighting shifts, and camera movement. Never lapse into static frame description or repeat global style specs in every block.
+2. `[SPEECH]:` (conditional): omit the entire line whenever no speech or character-sung vocal occurs in that block. Never write placeholders (`None`, `N/A`, `No speech`).
+3. `[SOUNDS]:` (recommended whenever physical/ambient sound exists): non-musical physical sound effects, environmental ambience, and animal/creature/nonverbal human sounds.
+4. `[MUSIC]:` (conditional): segment-specific diegetic or score cue. Omit when no music is specific to that segment. Always place after `[SOUNDS]`.
 
 **Mixing Rules**:
 - Assign one primary foreground event per block (intelligible dialogue, sung lyric phrase, major impact/action, or major musical transition). Keep competing channels subordinate and quieter.
@@ -58,11 +58,11 @@ Each timestamp block follows this exact channel order:
 - **Implicit Dialogue Requests**: If user asks to "add dialogue" without exact words, write concise, context-fitting lines at natural pauses (never force dialogue into every block). Preserve user-supplied wording verbatim.
 
 ## 6. Whole-Video Audio Fields
-- `overall_soundscape:` — one continuous English paragraph (1–4 sentences) summarizing ambient, physical, and nonverbal sounds across the full clip. Do not repeat dialogue or lyrics.
-- `non_diegetic_music:` — 1–3 English sentences describing audience-only background music (real instruments, tempo, rhythm, dynamic arc — not vague mood labels), or `N/A` when absent or complete silence is requested. Never introduce music absent from the Timeline. When the same `<Audio N>` genuinely supplies both physical sound and audience-only score, state the applicable relationship in both whole-video fields.
+- `overall_soundscape:`: one continuous English paragraph (1–4 sentences) summarizing ambient, physical, and nonverbal sounds across the full clip. Do not repeat dialogue or lyrics.
+- `non_diegetic_music:`: 1–3 English sentences describing audience-only background music (real instruments, tempo, rhythm, dynamic arc, not vague mood labels), or `N/A` when absent or complete silence is requested. Never introduce music absent from the Timeline. When the same `<Audio N>` genuinely supplies both physical sound and audience-only score, state the applicable relationship in both whole-video fields.
 
 ## 7. Grammar, Quotes & Direct-Language Bans
-- **Summary Chronology**: If `summary:` mentions more than one temporally related occurrence, preserve their order and relationship exactly as in the Timeline—never reorder, duplicate, or retell timestamp-by-timestamp beats.
+- **Summary Chronology**: If `summary:` mentions more than one temporally related occurrence, preserve their order and relationship exactly as in the Timeline; never reorder, duplicate, or retell timestamp-by-timestamp beats.
 - **Fixed Subject Labels**: Emit `<Subject N>` as plain text with whitespace separation. Never attach `'s`, plural `s`, hyphens, or punctuation directly to `>` (write `the red coat worn by <Subject 1>`, never `<Subject 1>'s red coat`).
 - **Zero Pronouns / Plurals in `summary:` & `[VISUAL]`**: Whenever `<Subject N>` tags are defined, repeat literal `<Subject N>` tags for every action, target, giver, receiver, and body part (`<Subject 1> hands the key to <Subject 2>`). Never use `he`, `she`, `him`, `her`, `his`, `their`, `theirs`, `they`, `them`, `both`, `Both` (even `both hands` -> `the left and right hands`), `the subjects`, `the couple`, or `the pair` inside `summary:` or `[VISUAL]`.
 - **Double Quotes & Unwanted Overlays**: Use English double quotes `""` **only** around meaningful text visibly present in the scene (signs, neon, labels, subtitles), preserving original wording verbatim. Omit watermarks, signatures, logos, or overlaid graphics unless explicitly requested.

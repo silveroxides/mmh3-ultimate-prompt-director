@@ -11,7 +11,7 @@ Envelope: `subject_definitions:` -> `summary:` -> `retention_analysis:` -> `deta
 - **No Range Shorthand**: List every Picture individually (`<Picture 1>, <Picture 2>, and <Picture 3>`), never `<Picture 1>-<Picture 3>` or `through`.
 - **Independent Namespaces**: `<Picture N>`, `<Video N>`, and `<Audio N>` indices are independent; matching numbers do not imply shared origin. A `<Video N>` with audio does **not** create `<Audio N>` unless an audio input/track is actually attached/exposed.
 - **Keep Meaning Stable**: Never change what a `<Subject N>`, `<Picture N>`, `<Video N>`, or `<Audio N>` represents across the 6 fields.
-- **Strict `<Video N>` & Full Anchors**: Only write `<Video N>` when a video is actually attached AND named by the user—never write `source video`, `guide video`, `original video`, `reference video`, `input video`, `story guide`, `the guide`, `in the guide`, `shown in the guide`, or `mimicking`. Describe each `<Subject N>` in full head-to-toe detail in `subject_definitions:` and on first appearance in `Timeline:`.
+- **Strict `<Video N>` & Full Anchors**: Only write `<Video N>` when a video is actually attached AND named by the user; never write `source video`, `guide video`, `original video`, `reference video`, `input video`, `story guide`, `the guide`, `in the guide`, `shown in the guide`, or `mimicking`. Describe each `<Subject N>` in full head-to-toe detail in `subject_definitions:` and on first appearance in `Timeline:`.
 - **Where Citations Live**: Cite `<Picture N>` provenance in `subject_definitions:` (and standalone `<Picture N>` only if it holds a concrete frame/planning role) and track in `retention_analysis:`. Never cite `<Picture N>`/`<Video N>`/`<Audio N>` inside `summary:` unless explicitly requested.
 
 ---
@@ -35,24 +35,24 @@ Begin `summary:` with `[tag]` or `[tag1 + tag2 + ...]` from **only** these 6 val
 ## 3. `retention_analysis:` Relationship Markers
 One line per tracked `<Subject N>` or standalone media label, literal ` - ` separator, nonempty descriptor:
 - **Visible (`<Subject N>`, `<Picture N>`, `<Video N>`)**:
-  - `fully_preserved` — every defined trait and applicable role remains intact (never assume merely from input presence).
-  - `partially_preserved` — some traits/roles are retained while others change, or only source motion/camera/scene progression remains (`use partially_preserved on <Video N> when source video motion/camera/setting stays visible`).
-  - `attribute_transfer` — source identity/appearance (`<Picture N>`) or source motion/choreography/camera (`<Video N>`) is transferred onto a different target `<Subject N>`.
-  - `weak_reference` — only broad style, category, composition, or mood remains.
+  - `fully_preserved`: every defined trait and applicable role remains intact (never assume merely from input presence).
+  - `partially_preserved`: some traits/roles are retained while others change, or only source motion/camera/scene progression remains (`use partially_preserved on <Video N> when source video motion/camera/setting stays visible`).
+  - `attribute_transfer`: source identity/appearance (`<Picture N>`) or source motion/choreography/camera (`<Video N>`) is transferred onto a different target `<Subject N>`.
+  - `weak_reference`: only broad style, category, composition, or mood remains.
 - **Audio (`<Audio N>`)**:
-  - `fully_copy` — complete signal copied as final track.
-  - `partially_copy` — selected layers/segments copied or mixed.
-  - `reference` — characteristics (timbre/delivery/style) followed without copying signal.
-  - `weak_reference` — broad audible category/atmosphere only.
+  - `fully_copy`: complete signal copied as final track.
+  - `partially_copy`: selected layers/segments copied or mixed.
+  - `reference`: characteristics (timbre/delivery/style) followed without copying signal.
+  - `weak_reference`: broad audible category/atmosphere only.
 - **Prohibited Inside `retention_analysis:`**: Detailed choreography, event timelines, production methods, repeated definitions, or `(Sx)` speaker IDs (except `<Audio N>: reference - ... of <Subject N> (Sx) ...` in vocal-timbre transfer).
 
 ---
 
 ## 4. Mixed Timestamped Samples + Independent References
 When the user supplies ordered timeline images (e.g., `Shot N at timestamp` or `M` leading timeline Pictures) plus later reference Pictures:
-1. Partition strictly by the user's explicit timestamp/segment count—never guess partition from order alone.
+1. Partition strictly by the user's explicit timestamp/segment count; never guess partition from order alone.
 2. Preserve supplied start timestamps literally (next start = previous end; final end = total duration). Do not replace them with equal slices.
-3. Map later reference Pictures strictly by user instructions and visible evidence—never assume later Picture order maps 1-to-1 to subject order, and never assume replacement unless requested. Apply supplemental style/action direction compatibly after media mapping is fixed.
+3. Map later reference Pictures strictly by user instructions and visible evidence; never assume later Picture order maps 1-to-1 to subject order, and never assume replacement unless requested. Apply supplemental style/action direction compatibly after media mapping is fixed.
 4. Keep timeline governing style global; treat a reference image's rendering style as local unless the user requests a global style override.
 
 ---
