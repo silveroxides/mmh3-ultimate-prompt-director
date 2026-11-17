@@ -237,3 +237,48 @@ def test_h3_architecture_length_grid_and_cli():
     rows = json.loads(proc.stdout)
     assert any(r["frames"] == 124 and r["seconds_3dp"] == 5.167 for r in rows)
     assert any(r["frames"] == 192 and r["seconds_3dp"] == 8.0 for r in rows)
+
+
+def test_attribute_transfer_audio_timbre_and_no_audio():
+    timbre_prompt = """subject_definitions:
+<Subject 1> is a street poet wearing a wool coat and scarf, defined visually from <Picture 1> and following motion from <Video 1>.
+<Subject 2> is a cafe barista in a canvas apron standing beside the espresso machine in <Video 1>.
+<Video 1> supplies walking motion, camera movement, timing, and street cafe setting.
+<Audio 1> is the vocal-timbre reference for <Subject 1> (S1).
+summary:
+[video editing + reference generation + audio reference] The target video is an edited version of <Video 1> where the main speaker is replaced by <Subject 1> using visual traits from <Picture 1> and motion from <Video 1>, referencing vocal timbre from <Audio 1> while <Subject 2> responds beside the counter.
+retention_analysis:
+<Subject 1>: attribute_transfer - visual identity and appearance from <Picture 1> transferred onto <Video 1> motion
+<Subject 2>: fully_preserved - non-replaced barista appearance, placement, and spoken response from <Video 1> retained
+<Video 1>: partially_preserved - camera movement, pacing, and cafe progression retained with speaker replaced by <Subject 1>
+<Audio 1>: reference - vocal timbre and delivery guide speech of <Subject 1> (S1) without copying audio signal
+detailed_description:
+Timeline:
+[00.00s-04.00s]:
+[VISUAL]: [Shot 1] Dolly Shot glides past steamed glass as <Subject 1> steps up to the wooden counter with gloved hands tucked into the wool coat while <Subject 2> turns from the brass espresso machine.
+[SPEECH]: <Subject 1> (S1) <d>[English] Two dark roasts when you have a moment. </d>
+[SOUNDS]: Door chime rings softly above porcelain cup clinks and espresso steam hiss.
+overall_soundscape:
+Soft cafe door chimes, porcelain cup clinks, and steady espresso steam fill the counter space without copying <Audio 1>.
+non_diegetic_music:
+N/A"""
+
+    res_timbre = validate_prompt(timbre_prompt, mode="reference_6", duration=4.0, require_retention=True)
+    assert res_timbre.valid, res_timbre.errors
+
+    no_audio_prompt = timbre_prompt.replace(
+        "<Audio 1> is the vocal-timbre reference for <Subject 1> (S1).\n", ""
+    ).replace(
+        "[video editing + reference generation + audio reference]", "[video editing + reference generation]"
+    ).replace(
+        ", referencing vocal timbre from <Audio 1>", ""
+    ).replace(
+        "<Audio 1>: reference - vocal timbre and delivery guide speech of <Subject 1> (S1) without copying audio signal\n", ""
+    ).replace(
+        "[SPEECH]: <Subject 1> (S1) <d>[English] Two dark roasts when you have a moment. </d>\n", ""
+    ).replace(
+        " without copying <Audio 1>", ""
+    )
+
+    res_no_audio = validate_prompt(no_audio_prompt, mode="reference_6", duration=4.0, require_retention=True)
+    assert res_no_audio.valid, res_no_audio.errors
