@@ -4,8 +4,8 @@ Use this guide whenever the user provides a brief, incomplete, or high-level pro
 
 ## 1. Subject Count & Static Head-to-Toe Definitions
 - **Subject Count Lock**: Match the exact subject count visible in supplied inputs or requested by the user. Never invent background crowds or extra main characters unless the scene requires them.
-- **Static Definitions Only (`subject_definitions:`)**: Define every recurring person, animal, prop, or environment with concrete visible traits: species/type, apparent age/gender traits, facial features, hair/fur (base color, countershading, markings), anatomy, full head-to-toe clothing/accessories, carried items, and continuity-critical details.
-- **No Cross-Dependencies or Timeline Motion**: Never define one `<Subject N>` using another subject's name or relative position, and never narrate plot events or timeline motion inside `subject_definitions:`. Keep each `<Subject N>` to one distinct entity.
+- **Static Definitions Only (`subject_definitions:`)**: Define every recurring person, animal, prop, or environment with concrete visible traits: species/type, evidence-based apparent gender/physical traits (do not assume gender from social norms), facial features, hair/fur (base color, countershading, localized/tail markings, glow), anatomy, full head-to-toe clothing/accessories, carried items, and continuity-critical details.
+- **No Cross-Dependencies or Timeline Motion**: Never define one `<Subject N>` using another subject's name or relative position, and never narrate plot events or timeline motion inside `subject_definitions:`. Keep each `<Subject N>` to one distinct entity. Do not describe placement as behind another subject/object unless visually obscured.
 
 ## 2. Density & Word-Count Targets
 Match richness to the user's request (`Overarching Principle`: keep concise if the user explicitly requests simplicity/brevity; dialogue-dense clips prioritize accurate spoken timing). By default for rich cinematic generation (especially `any2va` scene/storyboard and multi-reference prompts):

@@ -5,6 +5,7 @@ Apply these invariants across every MiniMax H3 prompt regardless of mode.
 ## 1. Formatting & Column-One Rules
 - Write every top-level field name, `Timeline:`, timestamp range, and channel tag (`[VISUAL]:`, `[SPEECH]:`, `[SOUNDS]:`, `[MUSIC]:`) starting in **column one**.
 - Never use markdown bullets (`-`, `*`), numbering prefixes, indentation, quotation marks, backticks, or code fences around field headers, definitions, or retention lines.
+- Use `<Subject N> is a ...` for reference-aware definitions (or `<Subject N>: ...` in 5-field standalone); never output backtick syntax guides.
 - Write all field labels and prose in English. Preserve original language **only** inside `<d>...</d>` dialogue/lyrics and inside double quotes for visible scene text.
 - Output nothing outside the selected field envelope.
 
@@ -29,7 +30,7 @@ Apply these invariants across every MiniMax H3 prompt regardless of mode.
   - `Arc Shot` — camera moves in an arc around the subject.
   - `Shake Slightly` / `Shake Strongly` — slight or strong handheld/impact shake.
   - `Roll Clockwise` / `Roll Counterclockwise` — camera rolls around lens axis.
-  - `POV` — camera presents a subject's first-person viewpoint (state whose viewpoint only when established).
+  - `POV` — camera presents a subject's first-person viewpoint (state whose viewpoint it is only when established by input or request; never assign first-person perspective to an external viewpoint).
 - Add `slow` or `fast` only when speed materially affects the shot; omit normal speed.
 
 ## 4. Channels, Foreground Priority & Mixing
@@ -41,9 +42,9 @@ Each timestamp block follows this exact channel order:
 
 **Mixing Rules**:
 - Assign one primary foreground event per block (intelligible dialogue, sung lyric phrase, major impact/action, or major musical transition). Keep competing channels subordinate and quieter.
-- During `[SPEECH]`, keep visual action readable, limit loud impacts, and duck music. Do not overlap dialogue with foreground sung lyrics unless explicitly requested.
+- During `[SPEECH]`, keep visual action readable, limit loud impacts, and duck music. Place loud impacts, rapid action, and musical peaks before or after spoken lines. Do not overlap dialogue with foreground sung lyrics unless explicitly requested.
 - **Music vs Sounds Boundary**: Never put music, beats, basslines, drums, or rhythm inside `[SOUNDS]`. In `[MUSIC]`, name `<Subject N>` only if that subject is actively playing the music.
-- **Lyrics vs Dialogue Boundary**: Put vocals actually spoken or sung by an on-screen/off-screen subject or narrator into `[SPEECH]`. Never emit `[SPEECH]` for non-diegetic background song lyrics not sung by any subject.
+- **Lyrics vs Dialogue Boundary**: Put vocals actually spoken or sung by an on-screen/off-screen subject or narrator into `[SPEECH]`. Never emit `[SPEECH]` for non-diegetic background song lyrics not sung by any subject, and never describe singing or speaking in `[VISUAL]` unless `[SPEECH]` is present in that block.
 
 ## 5. Speaker IDs & Speech Tags
 - Syntax: `[SPEECH]: <Subject N> (Sx) <d>[Language] spoken words </d>` (or `applicable_voice_desc (Sx)` when speaker has no `<Subject N>` definition; use `<Audio N>` only when verbal content exists solely inside directly reused soundtrack/music without a defined `(Sx)` speaker).
@@ -57,10 +58,11 @@ Each timestamp block follows this exact channel order:
 
 ## 6. Whole-Video Audio Fields
 - `overall_soundscape:` — one continuous English paragraph (1–4 sentences) summarizing ambient, physical, and nonverbal sounds across the full clip. Do not repeat dialogue or lyrics.
-- `non_diegetic_music:` — 1–3 English sentences describing audience-only background music (real instruments, tempo, rhythm, dynamic arc — not vague mood labels), or `N/A` when absent or complete silence is requested. Never introduce music absent from the Timeline.
+- `non_diegetic_music:` — 1–3 English sentences describing audience-only background music (real instruments, tempo, rhythm, dynamic arc — not vague mood labels), or `N/A` when absent or complete silence is requested. Never introduce music absent from the Timeline. When the same `<Audio N>` genuinely supplies both physical sound and audience-only score, state the applicable relationship in both whole-video fields.
 
 ## 7. Grammar, Quotes & Direct-Language Bans
+- **Summary Chronology**: If `summary:` mentions more than one temporally related occurrence, preserve their order and relationship exactly as in the Timeline—never reorder, duplicate, or retell timestamp-by-timestamp beats.
 - **Fixed Subject Labels**: Emit `<Subject N>` as plain text with whitespace separation. Never attach `'s`, plural `s`, hyphens, or punctuation directly to `>` (write `the red coat worn by <Subject 1>`, never `<Subject 1>'s red coat`).
 - **Zero Pronouns / Plurals in `[VISUAL]`**: Whenever `<Subject N>` tags are defined, repeat literal `<Subject N>` tags for every action, target, giver, receiver, and body part (`<Subject 1> hands the key to <Subject 2>`). Never use `he`, `she`, `him`, `her`, `his`, `their`, `theirs`, `they`, `them`, `both`, `Both` (even `both hands` -> `the left and right hands`), `the subjects`, `the couple`, or `the pair` inside `[VISUAL]`.
-- **Double Quotes**: Use English double quotes `""` **only** around meaningful text visibly present in the scene (signs, neon, labels, subtitles), preserving original wording verbatim.
+- **Double Quotes & Unwanted Overlays**: Use English double quotes `""` **only** around meaningful text visibly present in the scene (signs, neon, labels, subtitles), preserving original wording verbatim. Omit watermarks, signatures, logos, or overlaid graphics unless explicitly requested.
 - **No Em/En Dashes or Ambiguous Hyphen Compounds**: Never use em-dashes (`—`) or en-dashes (`–`), and avoid hyphenated compound adjectives in visual/motion prose (keep established structural phrases like `off-screen` only where specified). Write direct, literal, visually renderable wording.

@@ -12,8 +12,8 @@ Use this reference when MiniMax H3 receives **only the prompt text**—either fr
 *(Note: 5-Field Standalone also works whenever explicit static `<Subject N>` definitions clarify multiple characters; omit `retention_analysis:` and omit `[task]` brackets in both standalone envelopes.)*
 
 ## 2. Hard Standalone Boundary
-- **Zero Media Identifiers**: Never emit `<Picture N>`, `<Video N>`, `<Audio N>`, `retention_analysis:`, `[reference generation]`, `[keyframe completion]`, or phrases referencing "the supplied image", "first frame image", or "the storyboard".
-- **Self-Contained Specification**: Translate every visual fact (head-to-toe traits, setting, spatial layout, camera angle, lighting, colors) into complete English text so MiniMax H3 reproduces the scene with zero image access.
+- **Zero Media Identifiers or Vague Video Mentions**: Never emit `<Picture N>`, `<Video N>`, `<Audio N>`, `retention_analysis:`, `[reference generation]`, `[keyframe completion]`, or phrases referencing unseen media (`"the supplied image"`, `"first frame image"`, `"the storyboard"`, `source video`, `guide video`, `original video`, `reference video`, `pre-existing video`, `story guide`, `input video`, `the footage`, `the clip`).
+- **Self-Contained Specification & Anchors**: Translate every visual fact (head-to-toe traits, setting, spatial layout, camera angle, lighting, colors) into complete English text in `subject_definitions:` (5-field) and anchor each subject completely at first introduction in `Timeline:` so MiniMax H3 reproduces the scene with zero image or guide-video access.
 
 ## 3. Single Scene Image as Text-Only Seed
 - Treat the image strictly as the opening visual state at `00.00s` (`[Shot 1]`).
@@ -23,7 +23,7 @@ Use this reference when MiniMax H3 receives **only the prompt text**—either fr
 ## 4. Storyboard / Comic Strip / Sequential Guide as Text-Only Prompt
 - **Strict Graphic-Strip Stripping**: Never write `storyboard`, `storyboard sequence`, `storyboard video`, `panels`, `comic strip`, `stitched images`, `speech bubbles`, `speech balloons`, `panel borders`, `gutters`, `text boxes`, `speed lines`, or `sound effect lettering`.
 - **Continuous Cinematic Translation**: Convert ordered panels or stitched frames into real live-action/cinematic continuous motion across `[00.00s-...]`. Use `[Shot 1]` at `00.00s` and introduce `[Shot N]` only on genuine angle/scene cuts.
-- **Mandatory Multi-Channel Extraction**:
+- **Mandatory Multi-Channel Extraction**: Never collapse progression segments into visual-only blocks when audio cues exist:
   - `[SPEECH]`: Transcribe speech-bubble text, narration, or sung character vocals verbatim into `(Sx) <d>[Language] ... </d>`.
   - `[SOUNDS]`: Translate physical panel actions and comic SFX lettering into realistic physical/ambient sound descriptions (never quote comic onomatopoeia verbatim unless it is a real spoken word or visible sign).
   - `[MUSIC]`: Translate emotional/musical cues into concrete instrumentation and tempo.

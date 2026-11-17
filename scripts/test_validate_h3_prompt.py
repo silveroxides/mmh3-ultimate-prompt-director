@@ -263,7 +263,7 @@ Soft cafe door chimes, porcelain cup clinks, and steady espresso steam fill the 
 non_diegetic_music:
 N/A"""
 
-    res_timbre = validate_prompt(timbre_prompt, mode="reference_6", duration=4.0, require_retention=True)
+    res_timbre = validate_prompt(timbre_prompt, mode="reference_6", duration=4.0, require_retention=True, audio_mode="timbre", video_editing=True)
     assert res_timbre.valid, res_timbre.errors
 
     no_audio_prompt = timbre_prompt.replace(
@@ -280,5 +280,47 @@ N/A"""
         " without copying <Audio 1>", ""
     )
 
-    res_no_audio = validate_prompt(no_audio_prompt, mode="reference_6", duration=4.0, require_retention=True)
+    res_no_audio = validate_prompt(no_audio_prompt, mode="reference_6", duration=4.0, require_retention=True, audio_mode="none", video_editing=True)
     assert res_no_audio.valid, res_no_audio.errors
+
+
+def test_stage8_mode_flags_vague_video_ban_and_audio_consistency():
+    # Reject vague video references when no <Video N> tag exists
+    vague_leak = VALID_STANDALONE_4.replace("neon alley", "guide video alley")
+    res_vague = validate_prompt(vague_leak, mode="standalone_4")
+    assert not res_vague.valid
+    assert any("vague video reference" in e for e in res_vague.errors)
+
+    # Reject <d> inside overall_soundscape and warn on missing [SPEECH] / [MUSIC]
+    bad_soundscape = VALID_STANDALONE_4.replace(
+        "Steady heavy rainfall, rapid splashing footsteps, metallic impacts, and distant thunder echo across the alley.",
+        "Steady heavy rainfall while (S1) says <d>[English] Go! </d>.",
+    )
+    res_d = validate_prompt(bad_soundscape)
+    assert not res_d.valid
+    assert any("overall_soundscape:" in e and "<d>" in e for e in res_d.errors)
+
+    no_speech_warn = VALID_STANDALONE_4.replace(
+        "[SPEECH]: (S1) <d>[English] Keep moving, they locked the lower gate! </d>\n", ""
+    ).replace(
+        "sprints past puddles", "shouting while sprinting past puddles"
+    )
+    res_warn = validate_prompt(no_speech_warn)
+    assert res_warn.valid
+    assert any("without a [SPEECH] line" in w for w in res_warn.warnings)
+
+    # Verify --fl2va and --audio-mode copy on documented examples
+    examples_path = Path(__file__).resolve().parents[1] / "references" / "examples.md"
+    import re
+
+    blocks = re.findall(r"```text\r?\n(.*?)\r?\n```", examples_path.read_text(encoding="utf-8"), re.S)
+    ex2 = validate_prompt(blocks[1], mode="reference_6", duration=5.0, require_retention=True, fl2va=True)
+    assert ex2.valid, ex2.errors
+    ex3 = validate_prompt(blocks[2], mode="reference_6", duration=4.0, require_retention=True, audio_mode="copy", video_editing=True)
+    assert ex3.valid, ex3.errors
+
+    # Negative check for --audio-mode copy missing [MUSIC]: <Audio 1>
+    bad_copy = blocks[2].replace("[MUSIC]: <Audio 1>\n", "")
+    res_bad_copy = validate_prompt(bad_copy, mode="reference_6", audio_mode="copy", video_editing=True)
+    assert not res_bad_copy.valid
+    assert any("[MUSIC]: <Audio 1>" in e for e in res_bad_copy.errors)

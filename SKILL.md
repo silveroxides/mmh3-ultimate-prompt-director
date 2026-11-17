@@ -47,10 +47,10 @@ Generate accurate, one-shot MiniMax H3 video-audio prompts or answer MiniMax H3 
 2. Run the bundled validator relative to this skill's directory (never hardcode user home paths):
 
 ```bash
-python scripts/validate_h3_prompt.py --mode <auto|standalone_4|standalone_5|reference_6> [--duration <sec>] [--precision <2|3>] [--expected-segments <n>] [--expected-starts <00.00,03.20>] [--storyboard]
+python scripts/validate_h3_prompt.py --mode <auto|standalone_4|standalone_5|reference_6> [--duration <sec>] [--precision <2|3>] [--expected-segments <n>] [--expected-starts <00.00,03.20>] [--storyboard] [--audio-mode <copy|timbre|none>] [--video-editing] [--fl2va]
 ```
 
-Pass `--require-retention`, `--forbid-retention`, `--require-keyframe-tag`, `--forbid-keyframe-tag`, or `--strict-word-counts` when the routed scenario requires them. Read stdout JSON, fix every `errors` item (and review `warnings`), and repeat until `"valid": true` before replying.
+Pass `--require-retention`, `--forbid-retention`, `--require-keyframe-tag`, `--forbid-keyframe-tag`, `--audio-mode`, `--video-editing`, `--fl2va`, or `--strict-word-counts` when the routed scenario requires them (or run `--list-h3-lengths` to display exact `5+17k` durations). Read stdout JSON, fix every `errors` item (and review `warnings`), and repeat until `"valid": true` before replying.
 
 ## Stage 4: Deliver With Plain-English Guidance
 

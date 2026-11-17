@@ -24,7 +24,7 @@ Route carefully by how the user treats the supplied images/audio:
 
 ### Critical Distinction: Keyframe Anchor vs Scene/Subject Reference
 - **Keyframe Reference (`keyframe completion`)**: `<Picture N>` is explicitly assigned as a concrete first frame, final frame, or keyframe locking exact frame-0/endpoint pose and framing -> emit `[keyframe completion + ...]` in `summary:`, standalone `<Picture N> is ...` in `subject_definitions:`, `<Picture N>: fully_preserved - ...` in `retention_analysis:`, and start `[Shot 1]` directly from `<Picture 1>` at `00.00s`.
-- **Scene/Subject Visual Reference (`reference generation` only)**: `<Picture N>` guides setting, lighting, or subject appearance without locking frame 0 -> keep `[reference generation]` (do **not** add `keyframe completion` or `<Picture 1>: fully_preserved`), leave camera framing flexible, and cite `, referenced from <Picture N>.` on the `<Subject N>` line.
+- **Non-Keyframe Scene Reference (`reference generation` only)**: `<Picture N>` is a non-keyframe scene reference without a fixed boundary guiding setting, lighting, or subject appearance without locking frame 0 -> keep `[reference generation]` (do **not** add `keyframe completion` or `<Picture 1>: fully_preserved`), leave camera framing flexible, and cite `, referenced from <Picture N>.` on the `<Subject N>` line.
 
 ### Scene-Image Intent Variants
 - **Default (single unannotated image, no downstream tags requested)**: Treat as visual seed only. Omit `retention_analysis:` and omit `<Picture N>` tags; begin `summary:` with `[reference generation]`, describe opening `[Shot 1]` from that visual state, and extrapolate dynamic action forward.
@@ -44,8 +44,10 @@ When the user wants to replace a character seen in a scene image or storyboard (
 
 ---
 
-## 3. Storyboard / Comic Sheet / Guide Video
-- **Zero Graphic-Strip Leakage**: Never write `storyboard`, `panels`, `comic strip`, `stitched images`, `speech bubbles`, `borders`, `gutters`, or `sfx lettering`.
-- **Chronological Cinematic Flow**: Map ordered panels/frames into continuous multi-second motion blocks (`70+` words `[VISUAL]`). Keep one unbroken `[Shot 1]` if the guide is a single continuous camera take without cuts.
+## 3. Storyboard / Comic Sheet / Story Guide Video (VLM-Only Progression)
+- **Strict `<Video N>` Gating & Zero Vague Video Mentions**: Only when a video is provided AND the user explicitly requests `<Video 1>` (or `<Video N>`) downstream is the prompt allowed to use that strict `<Video N>` tag. Otherwise MiniMax H3 sees **zero** guide media—never write vague semantic video references (`source video`, `guide video`, `original video`, `reference video`, `pre-existing video`, `story guide`, `input video`, `the footage`, `the clip`) anywhere in `subject_definitions:`, `summary:`, `retention_analysis:`, or `Timeline:`.
+- **Self-Contained Subject Anchors**: Describe every `<Subject N>` in full head-to-toe detail in `subject_definitions:` and anchor each `<Subject N>` completely upon first introduction in `Timeline:` so MiniMax H3 has complete self-contained visual anchors across every beat.
+- **Zero Graphic-Strip Leakage**: Never write `storyboard`, `panels`, `comic strip`, `stitched images`, `progression images`, `speech bubbles`, `borders`, `gutters`, `halftone`, or `sfx lettering`.
+- **Chronological Cinematic Flow**: Group ordered panels or progression frames into cohesive multi-second movement phrases (never uniform single-frame micro-slices; `70+` words `[VISUAL]`). Keep one unbroken `[Shot 1]` if the progression is a single continuous camera take without cuts.
 - **Channel Extraction**: Transcribe bubble dialogue or sung character vocals into `[SPEECH]`; never place non-diegetic song lyrics into `[SPEECH]`. Translate panel actions/onomatopoeia into realistic `[SOUNDS]` (no music/drums in `[SOUNDS]`).
 - Apply Variants A–C and Conditional User-Instructed References identically to Section 2 (`[reference generation]` default, omit `retention_analysis:` unless downstream media tags are assigned).

@@ -53,6 +53,13 @@ STORYBOARD_LEAK_RE = re.compile(
     r"\b(?:storyboard(?:\s+sequence|\s+video)?|comic\s+strip|manga\s+page|stitched\s+images?|speech\s+bubbles?|speech\s+balloons?|panel\s+borders?|gutters?)\b",
     re.I,
 )
+VAGUE_VIDEO_RE = re.compile(
+    r"\b(?:source\s+video|guide\s+video|original\s+video|reference\s+video|pre-existing\s+video|story\s+guide|input\s+video|the\s+footage)\b",
+    re.I,
+)
+VIDEO_TAG_RE = re.compile(r"<Video\s+\d+>")
+AUDIO_TAG_RE = re.compile(r"<Audio\s+\d+>")
+VISUAL_SPEECH_WARN_RE = re.compile(r"\b(?:sings|singing|speaks|speaking|shouts|shouting|whispers|whispering)\b", re.I)
 TEMPLATE_LEAK_RE = re.compile(r"\{[^{}\n]{2,60}\}")
 
 
@@ -169,6 +176,9 @@ def validate_prompt(
     strict_word_counts: bool = False,
     expected_segments: int | None = None,
     expected_starts: list[str] | None = None,
+    audio_mode: str | None = None,
+    video_editing: bool = False,
+    fl2va: bool = False,
 ) -> ValidationReport:
     errors: list[str] = []
     warnings: list[str] = []
@@ -223,6 +233,11 @@ def validate_prompt(
         errors.append("Forbidden suffix or possessive attached directly to '<Subject N>' (e.g. `<Subject 1>'s`).")
     if "—" in text or "–" in text:
         errors.append("Em-dashes (—) and en-dashes (–) are forbidden in prompt prose.")
+    vague_vid = VAGUE_VIDEO_RE.findall(text)
+    if vague_vid and not VIDEO_TAG_RE.search(text):
+        errors.append(f"Forbidden vague video reference(s) {sorted(set(v.lower() for v in vague_vid))} when no <Video N> tag is active.")
+    elif vague_vid:
+        warnings.append(f"Use strict <Video N> tags instead of vague prose {sorted(set(v.lower() for v in vague_vid))}.")
 
     # Validate subject_definitions
     defined_subjects: set[str] = set()
@@ -239,6 +254,8 @@ def validate_prompt(
                 defined_subjects.add(m.group(0))
 
     # Validate summary
+    summary_tags: list[str] = []
+    sum_text = ""
     if "summary:" in sections:
         sum_text = " ".join(l.strip() for l in sections["summary:"] if l.strip())
         if not sum_text:
@@ -249,15 +266,15 @@ def validate_prompt(
                 if not bm:
                     errors.append("Reference-aware 'summary:' must begin with bracketed task prefix like '[reference generation]'.")
                 else:
-                    tags = [t.strip() for t in bm.group(1).split("+")]
-                    if len(tags) != len(set(tags)):
+                    summary_tags = [t.strip() for t in bm.group(1).split("+")]
+                    if len(summary_tags) != len(set(summary_tags)):
                         errors.append(f"Duplicate task tags in summary prefix: '{bm.group(1)}'.")
-                    unknown = [t for t in tags if t not in ALLOWED_TASK_TAGS]
+                    unknown = [t for t in summary_tags if t not in ALLOWED_TASK_TAGS]
                     if unknown:
                         errors.append(f"Unknown task tag(s) in summary prefix: {unknown}.")
-                    if require_keyframe_tag and "keyframe completion" not in tags:
+                    if require_keyframe_tag and "keyframe completion" not in summary_tags:
                         errors.append("Summary prefix must include 'keyframe completion' for concrete keyframe anchors.")
-                    if forbid_keyframe_tag and "keyframe completion" in tags:
+                    if forbid_keyframe_tag and "keyframe completion" in summary_tags:
                         errors.append("Summary prefix must not include 'keyframe completion' without a concrete keyframe anchor.")
             if MEDIA_TAG_RE.search(sum_text):
                 warnings.append("Media tag (<Picture/Video/Audio N>) appears in 'summary:'; keep media provenance in subject_definitions/retention_analysis unless explicitly requested.")
@@ -266,6 +283,7 @@ def validate_prompt(
                 warnings.append(f"'summary:' has {words} words (target >= 50 words for full 3-5 sentence summary).")
 
     # Validate retention_analysis
+    ret_entries: dict[str, str] = {}
     if "retention_analysis:" in sections:
         ret_lines = [l.strip() for l in sections["retention_analysis:"] if l.strip()]
         if not ret_lines:
@@ -278,6 +296,7 @@ def validate_prompt(
                 errors.append(f"Malformed retention_analysis line (expected '<label>: <marker> - <descriptor>'): '{rl}'.")
                 continue
             label, marker, desc = m.group(1).strip(), m.group(2).strip(), m.group(3).strip()
+            ret_entries[label] = marker
             if not desc:
                 errors.append(f"Empty retention descriptor in '{rl}'.")
             if re.search(r"\(S\d+\)", rl) and not (label.startswith("<Audio") and marker == "reference"):
@@ -385,6 +404,8 @@ def validate_prompt(
                     pm = PRONOUN_BANS_RE.findall(body)
                     if pm:
                         errors.append(f"Block [{st}s-{en}s] [VISUAL] uses banned pronoun/group word(s) {sorted(set(x.lower() for x in pm))} with defined <Subject N> tags.")
+                if "SPEECH" not in ch_names and VISUAL_SPEECH_WARN_RE.search(body) and not re.search(r"lips\s+remain\s+closed|silent|without\s+speaking", body, re.I):
+                    warnings.append(f"Block [{st}s-{en}s] [VISUAL] describes speaking/singing without a [SPEECH] line.")
                 if strict_word_counts and len(body.split()) < 70:
                     warnings.append(f"Block [{st}s-{en}s] [VISUAL] has {len(body.split())} words (rich target >= 70 words).")
             elif ch_name == "SPEECH":
@@ -415,10 +436,67 @@ def validate_prompt(
             errors.append(f"Segment start timestamps {actual_starts} do not match expected {norm_expected}.")
 
     # Whole-video audio summaries
-    for wf in ("overall_soundscape:", "non_diegetic_music:"):
-        val = " ".join(l.strip() for l in sections.get(wf, []) if l.strip())
+    soundscape_val = " ".join(l.strip() for l in sections.get("overall_soundscape:", []) if l.strip())
+    music_val = " ".join(l.strip() for l in sections.get("non_diegetic_music:", []) if l.strip())
+    for wf, val in (("overall_soundscape:", soundscape_val), ("non_diegetic_music:", music_val)):
         if not val:
             errors.append(f"'{wf}' cannot be empty (use 'N/A' for non_diegetic_music when absent).")
+    if "<d>" in soundscape_val or "</d>" in soundscape_val:
+        errors.append("Dialogue tags '<d>...</d>' are forbidden inside 'overall_soundscape:'.")
+
+    all_music_bodies = [body for blk in blocks for ch_name, body in blk["channels"] if ch_name == "MUSIC"]
+    if music_val and music_val.upper() != "N/A" and not all_music_bodies and not AUDIO_TAG_RE.search(music_val):
+        warnings.append("'non_diegetic_music:' describes music while Timeline: has no [MUSIC] cue.")
+
+    # Mode-contract enforcement flags
+    if video_editing:
+        if detected_mode != "reference_6":
+            errors.append("--video-editing requires the 6-field reference-aware envelope.")
+        if not summary_tags or summary_tags[0] != "video editing":
+            errors.append("--video-editing requires 'video editing' first in summary prefix.")
+        if "The target video is an edited version of <Video 1>" not in sum_text:
+            errors.append("--video-editing summary must open with 'The target video is an edited version of <Video 1>'.")
+        if "<Video 1>" not in ret_entries:
+            errors.append("--video-editing requires '<Video 1>' entry in retention_analysis:.")
+
+    if fl2va:
+        if detected_mode != "reference_6":
+            errors.append("--fl2va requires the 6-field reference-aware envelope.")
+        if "keyframe completion" not in summary_tags:
+            errors.append("--fl2va requires 'keyframe completion' in summary prefix.")
+        if ret_entries.get("<Picture 1>") != "fully_preserved":
+            errors.append("--fl2va requires '<Picture 1>: fully_preserved - ...' in retention_analysis:.")
+        if re.search(r"^<Picture\s+2>\s+is\b", "\n".join(sections.get("subject_definitions:", [])), re.M) and ret_entries.get("<Picture 2>") != "fully_preserved":
+            errors.append("--fl2va requires '<Picture 2>: fully_preserved - ...' when <Picture 2> is a standalone frame anchor.")
+        first_visual = next((body for ch_name, body in blocks[0]["channels"] if ch_name == "VISUAL"), "")
+        if "<Picture 1>" not in first_visual:
+            errors.append("--fl2va first segment [VISUAL] must open from '<Picture 1>'.")
+
+    if audio_mode == "copy":
+        if "audio reuse" not in summary_tags:
+            errors.append("--audio-mode copy requires 'audio reuse' in summary prefix.")
+        if ret_entries.get("<Audio 1>") not in ("fully_copy", "partially_copy"):
+            errors.append("--audio-mode copy requires '<Audio 1>: fully_copy' or 'partially_copy' in retention_analysis:.")
+        if not any(b == "<Audio 1>" for b in all_music_bodies):
+            errors.append("--audio-mode copy requires '[MUSIC]: <Audio 1>' in Timeline.")
+        if not soundscape_val.startswith("<Audio 1>"):
+            errors.append("--audio-mode copy requires 'overall_soundscape:' to begin with '<Audio 1>'.")
+        if not music_val.startswith("<Audio 1>"):
+            errors.append("--audio-mode copy requires 'non_diegetic_music:' to begin with '<Audio 1>'.")
+    elif audio_mode == "timbre":
+        if "audio reference" not in summary_tags:
+            errors.append("--audio-mode timbre requires 'audio reference' in summary prefix.")
+        if ret_entries.get("<Audio 1>") != "reference":
+            errors.append("--audio-mode timbre requires '<Audio 1>: reference' in retention_analysis:.")
+        if any("<Audio 1>" in b for b in all_music_bodies):
+            errors.append("--audio-mode timbre must not emit '[MUSIC]: <Audio 1>' (signal is not copied).")
+        if music_val.startswith("<Audio 1>"):
+            errors.append("--audio-mode timbre must not begin 'non_diegetic_music:' with copied '<Audio 1>'.")
+    elif audio_mode == "none":
+        if AUDIO_TAG_RE.search(text):
+            errors.append("--audio-mode none forbids '<Audio N>' tags anywhere in the prompt.")
+        if music_val.strip().upper() != "N/A":
+            errors.append("--audio-mode none requires 'non_diegetic_music: N/A'.")
 
     return ValidationReport(
         valid=len(errors) == 0,
@@ -447,6 +525,9 @@ def main() -> int:
     parser.add_argument("--strict-word-counts", action="store_true", help="Warn when summary < 50 words or [VISUAL] < 70 words.")
     parser.add_argument("--expected-segments", type=int, help="Exact required number of timeline segments when user/workflow specifies one.")
     parser.add_argument("--expected-starts", help="Comma-separated exact start timestamps (e.g. '00.00,03.20') to preserve literally.")
+    parser.add_argument("--audio-mode", choices=("copy", "timbre", "none"), help="Enforce audio-copy, vocal-timbre, or no-audio contract.")
+    parser.add_argument("--video-editing", action="store_true", help="Enforce video editing summary opening and <Video 1> retention.")
+    parser.add_argument("--fl2va", action="store_true", help="Enforce first/last frame anchor contract.")
     parser.add_argument("--list-h3-lengths", action="store_true", help="Print MiniMax H3 24 fps 5+17k supported frame/second lengths as JSON and exit.")
     args = parser.parse_args()
 
@@ -470,6 +551,9 @@ def main() -> int:
         strict_word_counts=args.strict_word_counts,
         expected_segments=args.expected_segments,
         expected_starts=starts_list,
+        audio_mode=args.audio_mode,
+        video_editing=args.video_editing,
+        fl2va=args.fl2va,
     )
     print(json.dumps(asdict(report), indent=2))
     return 0 if report.valid else 1

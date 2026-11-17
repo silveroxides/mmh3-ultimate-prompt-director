@@ -51,7 +51,7 @@ One line per tracked `<Subject N>` or standalone media label, literal ` - ` sepa
 When the user supplies ordered timeline images (e.g., `Shot N at timestamp` or `M` leading timeline Pictures) plus later reference Pictures:
 1. Partition strictly by the user's explicit timestamp/segment count—never guess partition from order alone.
 2. Preserve supplied start timestamps literally (next start = previous end; final end = total duration). Do not replace them with equal slices.
-3. Map later reference Pictures strictly by user instructions and visible evidence—never assume later Picture order maps 1-to-1 to subject order, and never assume replacement unless requested.
+3. Map later reference Pictures strictly by user instructions and visible evidence—never assume later Picture order maps 1-to-1 to subject order, and never assume replacement unless requested. Apply supplemental style/action direction compatibly after media mapping is fixed.
 4. Keep timeline governing style global; treat a reference image's rendering style as local unless the user requests a global style override.
 
 ---
