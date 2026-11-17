@@ -421,6 +421,15 @@ def validate_prompt(
                         errors.append(f"Block [{st}s-{en}s] [SPEECH] must wrap spoken words in '<d>...</d>'.")
                     elif any(not m.strip() for m in d_matches):
                         errors.append(f"Block [{st}s-{en}s] [SPEECH] has empty '<d></d>' dialogue tag.")
+                    elif any(
+                        re.match(
+                            r"^(?:\[[^\]]+\]\s*)?[\(\[]?(?:no\s+dialogue[^)\]]*|no\s+speech[^)\]]*|silent(?:\s+focus)?|silence|none|n/a)[\)\]]?\.?$",
+                            m.strip(),
+                            re.I,
+                        )
+                        for m in d_matches
+                    ):
+                        errors.append(f"Block [{st}s-{en}s] [SPEECH] contains non-spoken placeholder/stage note inside '<d>...</d>'; omit [SPEECH] when silent.")
                     elif not SPEECH_SYNTAX_RE.search(body):
                         errors.append(f"Block [{st}s-{en}s] [SPEECH] missing speaker ID '(Sx)' or '<Audio N>' source.")
             elif ch_name == "SOUNDS":

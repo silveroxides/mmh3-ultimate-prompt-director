@@ -48,6 +48,7 @@ Each timestamp block follows this exact channel order:
 
 ## 5. Speaker IDs & Speech Tags
 - Syntax: `[SPEECH]: <Subject N> (Sx) <d>[Language] spoken words </d>` (or `applicable_voice_desc (Sx)` when speaker has no `<Subject N>` definition; use `<Audio N>` only when verbal content exists solely inside directly reused soundtrack/music without a defined `(Sx)` speaker).
+- **Spoken-Aloud `<d>` Boundary**: Everything inside `<d>...</d>` is literally spoken aloud by the model in the speaker's voice. Place voice, emotion, action, or delivery descriptors **before** `<d>`, never inside `<d>...</d>`. Never write stage notes, parenthetical remarks, silence labels, or placeholders such as `(No dialogue, silent focus)`, `(silent)`, or `N/A` inside `<d>...</d>`; omit the entire `[SPEECH]` line when no speech occurs.
 - Assign `(S1)`, `(S2)`, ... in actual vocal-event order; keep IDs stable across every shot. Never assign an ID to a non-speaking subject.
 - **Multiple Simultaneous Speakers**: Use compound ID `(S1,S2)`.
 - **Off-Screen Voiceover**: Write `<Subject N> (Sx) says in an off-screen voiceover <d>[Lang] ... </d>` and state immediately after `</d>` that the on-screen subject's lips remain closed (keep delivery/action outside `<d>`).

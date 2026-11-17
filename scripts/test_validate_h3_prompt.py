@@ -343,3 +343,11 @@ def test_stage8_mode_flags_vague_video_ban_and_audio_consistency():
     res_bad_copy = validate_prompt(bad_copy, mode="reference_6", audio_mode="copy", video_editing=True)
     assert not res_bad_copy.valid
     assert any("[MUSIC]: <Audio 1>" in e for e in res_bad_copy.errors)
+
+    placeholder_d = VALID_REFERENCE_6_VARIANT_D.replace(
+        "[SPEECH]: <Subject 1> (S1) <d>[English] Boarding closes in thirty seconds. </d>",
+        "[SPEECH]: <Subject 1> (S1) <d>[English] (No dialogue, silent focus) </d>",
+    )
+    res_placeholder_d = validate_prompt(placeholder_d, mode="reference_6", duration=4.0, require_retention=True)
+    assert not res_placeholder_d.valid
+    assert any("non-spoken placeholder/stage note" in e for e in res_placeholder_d.errors)
