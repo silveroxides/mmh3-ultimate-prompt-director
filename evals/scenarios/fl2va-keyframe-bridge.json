@@ -1,0 +1,14 @@
+{
+  "name": "First and last frame keyframe bridge",
+  "prompt": "Bridge Picture 1 as the starting frame and Picture 2 as the exact ending frame over 5 seconds: a ceramic teacup falls off a wooden counter and shatters on tile.",
+  "judge": [
+    {
+      "check": "Prompt uses [keyframe completion], defines <Picture 1> at 00.00s and <Picture 2> at 05.00s endpoint, and tracks both with fully_preserved.",
+      "weight": 0.5
+    },
+    {
+      "check": "Timeline transitions physically from <Picture 1> into the exact <Picture 2> composition with realistic ceramic shatter sounds and passes validate_h3_prompt.py.",
+      "weight": 0.5
+    }
+  ]
+}

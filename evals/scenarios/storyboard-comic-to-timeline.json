@@ -1,0 +1,14 @@
+{
+  "name": "Storyboard comic sheet to continuous timeline",
+  "prompt": "Turn this 4-panel manga page into an 8s MiniMax H3 prompt where the swordfighter leaps over a wall and shouts 'Move!' in panel 3. MiniMax H3 will NOT receive the manga image.",
+  "judge": [
+    {
+      "check": "Output uses standalone envelope with zero <Picture N> tags and zero comic terminology (no storyboard, panels, comic strip, speech bubbles, gutters, or borders).",
+      "weight": 0.5
+    },
+    {
+      "check": "Speech bubble wording 'Move!' is captured in [SPEECH] with (S1) <d>, physical sword/footstep/wall sounds appear in [SOUNDS], and validate_h3_prompt.py --storyboard passes.",
+      "weight": 0.5
+    }
+  ]
+}

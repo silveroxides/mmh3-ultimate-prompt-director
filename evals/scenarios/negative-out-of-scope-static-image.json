@@ -1,0 +1,10 @@
+{
+  "name": "Negative out-of-scope static image prompt",
+  "prompt": "Create a static 1024x1024 MOSS-Image layout JSON with bounding boxes for a coffee shop poster.",
+  "judge": [
+    {
+      "check": "Agent does NOT force MiniMax H3 video timeline fields onto a static poster layout request.",
+      "weight": 1.0
+    }
+  ]
+}

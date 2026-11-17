@@ -1,0 +1,18 @@
+{
+  "name": "Minimal text input to one-shot standalone H3 prompt",
+  "prompt": "Make me a 6 second MiniMax H3 video prompt of a cyberpunk rain chase and add one line of dialogue.",
+  "judge": [
+    {
+      "check": "The agent produces a complete standalone MiniMax H3 prompt without exposing internal preset names or asking unnecessary questions.",
+      "weight": 0.3
+    },
+    {
+      "check": "The prompt passes validate_h3_prompt.py with contiguous 00.00s-06.00s timestamps, zero media tags, valid (S1) <d>[Language] ...</d> syntax, and no placeholders.",
+      "weight": 0.4
+    },
+    {
+      "check": "Minimal user input is expanded into continuous camera motion, concrete physical actions, non-musical [SOUNDS], overall_soundscape, and non_diegetic_music.",
+      "weight": 0.3
+    }
+  ]
+}

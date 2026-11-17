@@ -1,0 +1,14 @@
+{
+  "name": "Video attribute transfer with audio copy and non-replaced background speaker",
+  "prompt": "Take Video 1 of a street guitarist and a bystander talking, swap the guitarist with the person in Picture 1, keep Video 1's camera motion and full audio track Audio 1, and keep the bystander's dialogue.",
+  "judge": [
+    {
+      "check": "Summary opens with [video editing + reference generation + audio reuse] and 'The target video is an edited version of <Video 1>', with zero mention of the replaced guitarist's old look.",
+      "weight": 0.4
+    },
+    {
+      "check": "Bystander is defined as <Subject 2>, their [SPEECH] stays attributed to <Subject 2> (S1), <Audio 1> uses fully_copy and [MUSIC]: <Audio 1>, and validate_h3_prompt.py passes.",
+      "weight": 0.6
+    }
+  ]
+}

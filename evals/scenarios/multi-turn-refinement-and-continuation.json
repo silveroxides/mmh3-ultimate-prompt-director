@@ -1,0 +1,14 @@
+{
+  "name": "Multi-turn refinement and video continuation",
+  "prompt": "Follow-up: Take the 6s standalone cyberpunk chase prompt we just made, extend it to 8s, remove the spoken dialogue, switch the music to driving industrial drums, and then write a second 5s clip prompt that continues directly from that Video 1 ending while matching its audio energy without copying the raw audio track.",
+  "judge": [
+    {
+      "check": "Updated first prompt cleanly spans 00.00s-08.00s, omits all [SPEECH] lines without placeholders, updates [MUSIC] + non_diegetic_music to industrial drums, and passes validate_h3_prompt.py.",
+      "weight": 0.5
+    },
+    {
+      "check": "Continuation prompt uses [video continuation + audio reference], tracks <Video 1> and <Audio 1>: reference cleanly, continues from ending momentum, and passes validate_h3_prompt.py.",
+      "weight": 0.5
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Repair broken H3 prompt and answer beginner voiceover question",
+  "prompt": "Fix this broken 6s MiniMax H3 prompt and tell me how to write an off-screen voiceover: '[00.00s-3.0s]: [VISUAL]: [Shot 1] <Subject 1>'s coat moves as they walk. [SPEECH]: None. [3.5s-06.00s]: [VISUAL]: [Shot 2] Both hands open the door.'",
+  "judge": [
+    {
+      "check": "Repaired prompt fixes field envelope, timestamp zero-padding/gap, <Subject 1>'s possessive, 'they'/'Both' pronouns, over-cut [Shot 2] if continuous, and omits [SPEECH]: None.",
+      "weight": 0.6
+    },
+    {
+      "check": "Explains off-screen voiceover syntax ('says in an off-screen voiceover <d>[Lang] ...</d>' plus stating lips remain closed) clearly.",
+      "weight": 0.4
+    }
+  ]
+}

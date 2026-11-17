@@ -1,0 +1,14 @@
+{
+  "name": "Video attribute transfer no-audio variant and non-keyframe scene reference check",
+  "prompt": "Use Video 1 for dance choreography with Picture 1 as the dancer, completely silent (no audio). Also explain briefly why I wouldn't tag a regular character turnaround image as a keyframe.",
+  "judge": [
+    {
+      "check": "Prompt uses [video editing + reference generation], omits all <Audio N> definitions/retention lines, sets non_diegetic_music: N/A, and passes validate_h3_prompt.py.",
+      "weight": 0.5
+    },
+    {
+      "check": "Explanation distinguishes keyframe anchors (locking frame 0 or endpoint) from character/scene visual references in plain language without preset jargon.",
+      "weight": 0.5
+    }
+  ]
+}

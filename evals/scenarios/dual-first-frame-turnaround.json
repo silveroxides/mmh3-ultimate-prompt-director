@@ -1,0 +1,18 @@
+{
+  "name": "Dual first-frame anchor plus multi-picture turnaround and vocal timbre",
+  "prompt": "I have 3 pictures and 1 audio clip for an 8 second MiniMax H3 video. Picture 1 should be the exact opening frame AND shows both characters, Picture 2 is character 1 turnaround, Picture 3 is character 2 turnaround. Have them argue briefly on a misty pier using Audio 1 just as character 1's voice tone.",
+  "judge": [
+    {
+      "check": "Both <Subject 1> and <Subject 2> cite their respective <Picture N> pairs individually (e.g. <Picture 1> and <Picture 2>, <Picture 1> and <Picture 3>) without range shorthand.",
+      "weight": 0.3
+    },
+    {
+      "check": "Summary begins with [keyframe completion + reference generation + audio reference], <Picture 1> has standalone first-frame anchor definition and fully_preserved retention, and [Shot 1] starts from <Picture 1>.",
+      "weight": 0.4
+    },
+    {
+      "check": "<Audio 1> uses reference marker (not fully_copy), [VISUAL] repeats <Subject N> tags with zero pronouns or 'both', and validate_h3_prompt.py passes.",
+      "weight": 0.3
+    }
+  ]
+}
