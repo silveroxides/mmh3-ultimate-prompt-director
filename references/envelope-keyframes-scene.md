@@ -44,10 +44,10 @@ When the user wants to replace a character seen in a scene image or storyboard (
 
 ---
 
-## 3. Storyboard / Comic Sheet / Story Guide Video (VLM-Only Progression)
-- **Strict `<Video N>` Gating & Zero Vague/Meta Guide Mentions**: Only when a video is provided AND the user explicitly requests `<Video 1>` (or `<Video N>`) downstream is the prompt allowed to use that strict `<Video N>` tag. Otherwise MiniMax H3 sees **zero** guide media—never write vague or meta references (`the guide`, `in the guide`, `from the guide`, `shown in the guide`, `mimicking`, `source video`, `guide video`, `original video`, `reference video`, `pre-existing video`, `story guide`, `input video`, `the footage`, `the clip`) anywhere in `subject_definitions:`, `summary:`, `retention_analysis:`, or `Timeline:`. Write directly as a firsthand scene.
-- **Self-Contained Subject Anchors**: Describe every `<Subject N>` in full head-to-toe detail in `subject_definitions:` and anchor each `<Subject N>` completely upon first introduction in `Timeline:` so MiniMax H3 has complete self-contained visual anchors across every beat.
+## 3. Storyboard / Comic Sheet / Guide Video
+- **Strict `<Video N>` Rule**: Only write `<Video N>` when a video is provided AND the user names `<Video N>`. Never write `source video`, `guide video`, `original video`, `reference video`, `input video`, `story guide`, `the guide`, `in the guide`, `shown in the guide`, or `mimicking` anywhere in `subject_definitions:`, `summary:`, `retention_analysis:`, or `Timeline:`.
+- **Full Subject Descriptions**: Describe each `<Subject N>` in full head-to-toe detail in `subject_definitions:` and on first appearance in `Timeline:`.
 - **Zero Graphic-Strip Leakage**: Never write `storyboard`, `panels`, `comic strip`, `stitched images`, `progression images`, `speech bubbles`, `borders`, `gutters`, `halftone`, or `sfx lettering`.
-- **Chronological Cinematic Flow**: Group ordered panels or progression frames into cohesive multi-second movement phrases (never uniform single-frame micro-slices; `70+` words `[VISUAL]`). Keep one unbroken `[Shot 1]` if the progression is a single continuous camera take without cuts.
+- **Chronological Cinematic Flow**: Group ordered panels or frames into cohesive multi-second motion blocks (never uniform single-frame micro-slices; `70+` words `[VISUAL]`). Keep one unbroken `[Shot 1]` if there are no camera cuts.
 - **Channel Extraction**: Transcribe bubble dialogue or sung character vocals into `[SPEECH]`; never place non-diegetic song lyrics into `[SPEECH]`. Translate panel actions/onomatopoeia into realistic `[SOUNDS]` (no music/drums in `[SOUNDS]`).
 - Apply Variants A–C and Conditional User-Instructed References identically to Section 2 (`[reference generation]` default, omit `retention_analysis:` unless downstream media tags are assigned).

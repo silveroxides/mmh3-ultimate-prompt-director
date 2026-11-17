@@ -12,8 +12,8 @@ Use this reference when MiniMax H3 receives **only the prompt text**—either fr
 *(Note: 5-Field Standalone also works whenever explicit static `<Subject N>` definitions clarify multiple characters; omit `retention_analysis:` and omit `[task]` brackets in both standalone envelopes.)*
 
 ## 2. Hard Standalone Boundary
-- **Zero Media Identifiers or Vague Video Mentions**: Never emit `<Picture N>`, `<Video N>`, `<Audio N>`, `retention_analysis:`, `[reference generation]`, `[keyframe completion]`, or phrases referencing unseen media (`"the supplied image"`, `"first frame image"`, `"the storyboard"`, `source video`, `guide video`, `original video`, `reference video`, `pre-existing video`, `story guide`, `input video`, `the footage`, `the clip`).
-- **Self-Contained Specification & Anchors**: Translate every visual fact (head-to-toe traits, setting, spatial layout, camera angle, lighting, colors) into complete English text in `subject_definitions:` (5-field) and anchor each subject completely at first introduction in `Timeline:` so MiniMax H3 reproduces the scene with zero image or guide-video access.
+- **Zero Media Identifiers or Video Mentions**: Never emit `<Picture N>`, `<Video N>`, `<Audio N>`, `retention_analysis:`, `[reference generation]`, `[keyframe completion]`, or phrases referencing unseen media (`"the supplied image"`, `"first frame image"`, `"the storyboard"`, `source video`, `guide video`, `original video`, `reference video`, `input video`, `story guide`, `the guide`, `in the guide`, `shown in the guide`, `mimicking`).
+- **Full Subject Descriptions**: Describe every visual fact (head-to-toe traits, setting, spatial layout, camera angle, lighting, colors) in `subject_definitions:` (5-field) and describe each subject in full on first appearance in `Timeline:` so MiniMax H3 needs no image or video access.
 
 ## 3. Single Scene Image as Text-Only Seed
 - Treat the image strictly as the opening visual state at `00.00s` (`[Shot 1]`).
