@@ -106,7 +106,7 @@ summary:
 [reference generation] <Subject 1> kneels beside misted greenhouse glass to examine a blooming night orchid while morning sunbeams cut through humid air and water droplets roll from broad leaves in natural live action cinema.
 detailed_description:
 Timeline:
-[00.00s-05.167s]:
+[00.000s-05.167s]:
 [VISUAL]: [Shot 1] Medium shot slowly Push In behind <Subject 1> kneeling beside dark soil beds as the right hand of <Subject 1> parts broad waxy leaves gently, revealing pale orchid petals glistening under slanted golden sunbeams while humid mist drifts past rusted iron rafters and water drips steadily onto damp stone.
 [SOUNDS]: Soft leaf rustle, steady greenhouse water drips, and quiet morning breeze against glass panes.
 overall_soundscape:
