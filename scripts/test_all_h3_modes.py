@@ -18,7 +18,7 @@ RICH_TEXT_BLOCK_B = (
 
 
 def test_standalone_modes_and_inplace_replacement():
-    # 5-field T2VA multi-subject consistency + colon syntax
+    # 5-field standalone multi-subject consistency + colon syntax
     p_5 = f"""subject_definitions:
 <Subject 1>: A courier wearing a dark waxed canvas coat, wool scarf, and scuffed leather boots.
 <Subject 2>: A watchmaker wearing brass spectacles and an olive twill apron beside a wooden counter.
@@ -42,7 +42,7 @@ A low muted cello opens beneath the rain before giving way to sparse solo piano 
     res5 = validate_prompt(p_5, mode="standalone_5", duration=7.0, strict_word_counts=True)
     assert res5.valid, res5.errors
 
-    # SCENE_IMAGE_T2VA standalone (4-field visual seed -> zero media tags, full subject & scene grounding)
+    # Scene image standalone seed (4-field -> zero media tags, full subject & scene grounding)
     p_scene_t2va = """integrated_multimodal_description:
 Timeline:
 [00.00s-05.00s]:
@@ -56,7 +56,7 @@ Soft acoustic guitar fingerpicking plays gently beneath the mountain stream."""
     res_sc = validate_prompt(p_scene_t2va, mode="standalone_4", duration=5.0)
     assert res_sc.valid, res_sc.errors
 
-    # Storyboard T2VA standalone (4-field) + --storyboard + in-place replacement (no swap prose)
+    # Storyboard standalone (4-field) + --storyboard + in-place replacement (no swap prose)
     p_story_t2va = """integrated_multimodal_description:
 Timeline:
 [00.00s-04.00s]:
@@ -113,7 +113,7 @@ N/A"""
 
 
 def test_scene_image_variants_a_b_c_and_default():
-    # Default SCENE_IMAGE_ANY2VA (visual seed only -> no retention_analysis:, no <Picture 1>)
+    # Default scene-image reference (visual seed only -> no retention_analysis:, no <Picture 1>)
     p_default = """subject_definitions:
 <Subject 1> is a botanist wearing a linen field shirt, rolled sleeves, leather satchel, and dusty khaki trousers.
 summary:
@@ -176,7 +176,7 @@ N/A"""
 
 
 def test_mixed_timeline_samples_and_multi_subject_attr_transfer():
-    # MIXED literal timestamps (precision=3, expected_starts, trailing ref Picture)
+    # Mixed literal timestamps (precision=3, expected_starts, trailing ref Picture)
     p_mixed = """subject_definitions:
 <Subject 1> is a mountain cyclist in a matte black helmet, neon windbreaker, and padded gloves, referenced from <Picture 3>.
 <Picture 1> is the timeline start frame at 00.000s.
