@@ -23,3 +23,9 @@ npx skills add silveroxides/mmh3-ultimate-prompt-director -g
 python scripts/validate_h3_prompt.py --help
 pytest scripts/
 ```
+
+## License & Notice
+
+This skill is licensed under the [MIT License](LICENSE) (`Copyright (c) 2026 silveroxides`). Any copies, forks, or substantial portions must retain the copyright and permission notice.
+
+This is an independent community skill and is not affiliated with or endorsed by MiniMax. Any use of MiniMax H3 models, weights, or hosted APIs remains subject to the applicable MiniMax H3 Community License Agreement or platform terms.
