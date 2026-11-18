@@ -210,17 +210,17 @@ N/A"""
     )
     assert res_mix.valid, res_mix.errors
 
-    # Multi-subject Attribute Transfer (<Subject 1> from <Picture 1>, <Subject 2> from <Picture 2>) + Audio Copy
+    # Multi-subject attribute transfer (<Subject 1> from <Picture 1>, <Subject 2> from <Picture 2>) + Audio Copy
     p_multi_attr = """subject_definitions:
-<Subject 1> is a woman in a tailored emerald blazer and silver earrings, defined visually from <Picture 1> and following motion from <Video 1>.
-<Subject 2> is a tall man in a charcoal trench coat, defined visually from <Picture 2> and following motion from <Video 1>.
-<Video 1> supplies walking choreography, camera movement, timing, and plaza progression.
+<Subject 1> is a woman in a tailored emerald blazer, dark trousers, and silver earrings, defined visually from <Picture 1> and following the foreground lead walking motion from <Video 1>.
+<Subject 2> is a tall man in a charcoal trench coat, grey slacks, and leather shoes, defined visually from <Picture 2> and following the trailing partner walking motion from <Video 1>.
+<Video 1> is the source video supplying walking choreography, camera movement, timing, and plaza progression.
 <Audio 1> is the full synchronized soundtrack copied from <Video 1>.
 summary:
-[video editing + reference generation + audio reuse] The target video is an edited version of <Video 1> where two lead walkers are replaced by <Subject 1> from <Picture 1> and <Subject 2> from <Picture 2> while retaining the plaza camera motion and <Audio 1> soundtrack.
+[video editing + reference generation + audio reuse] The target video is an edited version of <Video 1> where two walkers are replaced by <Subject 1> and <Subject 2> while retaining the plaza camera motion and <Audio 1> soundtrack as <Subject 1> leads across stone paving and gestures toward the north entrance beside <Subject 2>.
 retention_analysis:
-<Subject 1>: attribute_transfer - visual identity and blazer from <Picture 1> transferred onto <Video 1> motion
-<Subject 2>: attribute_transfer - visual identity and trench coat from <Picture 2> transferred onto <Video 1> motion
+<Subject 1>: attribute_transfer - visual identity and emerald blazer from <Picture 1> transferred onto the foreground lead walking role in <Video 1>
+<Subject 2>: attribute_transfer - visual identity and trench coat from <Picture 2> transferred onto the trailing partner walking role in <Video 1>
 <Video 1>: partially_preserved - camera movement, choreography, timing, and plaza setting retained with subjects replaced by <Subject 1> and <Subject 2>
 <Audio 1>: fully_copy - source audio track is copied entirely
 detailed_description:
