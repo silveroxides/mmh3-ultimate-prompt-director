@@ -19,6 +19,7 @@ Run `scripts/validate_h3_prompt.py` first to locate exact structural/grammar err
 | **Replacement prose leak** | "Replace the woman in Video 1 with <Subject 1>" or defining the old replaced character | Delete superseded identity everywhere; describe one completed video with `<Subject 1>` already in place. |
 | **Graphic-strip leak** | Mentions `storyboard`, `panels`, `comic strip`, `speech bubbles`, `gutters`, `borders` | Rewrite as live camera shots, transcribing bubble words into `[SPEECH]` and action/SFX into `[SOUNDS]`. |
 | **Dashes & placeholders** | Contains `—`, `–`, hyphenated adjectives, `{...}`, or vague `physical interaction` | Replace dashes/hyphens with clean spaced prose; replace placeholders with exact mechanical actions and body parts. |
+| **Bare speaker ID** | Bare `(S1) <d>...</d>` when `<Subject N>` tags are defined | Prepend the speaking subject tag: `<Subject 2> (S1) <d>[Language] ... </d>`. |
 
 ---
 

@@ -24,7 +24,7 @@ Use this reference when MiniMax H3 receives **only the prompt text**, either fro
 - **Strict Graphic-Strip Stripping**: Never write `storyboard`, `storyboard sequence`, `storyboard video`, `panels`, `comic strip`, `stitched images`, `speech bubbles`, `speech balloons`, `panel borders`, `gutters`, `text boxes`, `speed lines`, or `sound effect lettering`.
 - **Continuous Cinematic Translation**: Convert ordered panels or stitched frames into real live-action/cinematic continuous motion across `[00.00s-...]`. Use `[Shot 1]` at `00.00s` and introduce `[Shot N]` only on genuine angle/scene cuts.
 - **Mandatory Multi-Channel Extraction**: Never collapse progression segments into visual-only blocks when audio cues exist:
-  - `[SPEECH]`: Transcribe speech-bubble text, narration, or sung character vocals verbatim into `(Sx) <d>[Language] ... </d>`.
+  - `[SPEECH]`: Transcribe speech-bubble text, narration, or sung character vocals verbatim into `[SPEECH]: <Subject N> (Sx) <d>[Language] ... </d>` (mapping each line to the speaking subject, e.g. `<Subject 2> (S1)`; use `voice_desc (Sx)` only if the speaker has no `<Subject N>` alias).
   - `[SOUNDS]`: Translate physical panel actions and comic SFX lettering into realistic physical/ambient sound descriptions (never quote comic onomatopoeia verbatim unless it is a real spoken word or visible sign).
   - `[MUSIC]`: Translate emotional/musical cues into concrete instrumentation and tempo.
 

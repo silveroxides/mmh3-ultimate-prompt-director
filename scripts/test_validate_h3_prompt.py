@@ -351,3 +351,12 @@ def test_stage8_mode_flags_vague_video_ban_and_audio_consistency():
     res_placeholder_d = validate_prompt(placeholder_d, mode="reference_6", duration=4.0, require_retention=True)
     assert not res_placeholder_d.valid
     assert any("non-spoken placeholder/stage note" in e for e in res_placeholder_d.errors)
+
+    bare_speaker_prompt = VALID_REFERENCE_6_VARIANT_D.replace(
+        "[SPEECH]: <Subject 1> (S1) <d>[English] Boarding closes in thirty seconds. </d>",
+        "[SPEECH]: (S1) <d>I can't anymore...</d>",
+    )
+    res_bare = validate_prompt(bare_speaker_prompt, mode="reference_6", duration=4.0, require_retention=True)
+    assert res_bare.valid
+    assert any("bare speaker ID without subject tag" in w for w in res_bare.warnings)
+    assert any("missing leading language tag" in w for w in res_bare.warnings)

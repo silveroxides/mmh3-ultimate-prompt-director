@@ -432,6 +432,19 @@ def validate_prompt(
                         errors.append(f"Block [{st}s-{en}s] [SPEECH] contains non-spoken placeholder/stage note inside '<d>...</d>'; omit [SPEECH] when silent.")
                     elif not SPEECH_SYNTAX_RE.search(body):
                         errors.append(f"Block [{st}s-{en}s] [SPEECH] missing speaker ID '(Sx)' or '<Audio N>' source.")
+                    else:
+                        all_subjs = defined_subjects | {
+                            m.group(0)
+                            for b in blocks
+                            for c, bdy in b["channels"]
+                            if c == "VISUAL"
+                            for m in SUBJECT_TAG_RE.finditer(bdy)
+                        }
+                        if all_subjs and not SUBJECT_TAG_RE.search(body) and not re.search(r"<Audio\s+\d+>|\b(?:narrator|narrating|voiceover|voice-over|off-screen\s+voice)\b", body, re.I):
+                            warnings.append(f"Block [{st}s-{en}s] [SPEECH] has bare speaker ID without subject tag; attribute dialogue to the speaking subject, e.g. '<Subject 2> (S1)'.")
+                        for d_text in d_matches:
+                            if not re.match(r"^\s*\[[a-zA-Z\-]+\]", d_text.strip()):
+                                warnings.append(f"Block [{st}s-{en}s] [SPEECH] <d> tag is missing leading language tag '[Language]', e.g. '<d>[English] ...</d>'.")
             elif ch_name == "SOUNDS":
                 if re.search(r"\b(?:background music|soundtrack|orchestral score|synth beat|bassline|drumbeat)\b", body, re.I):
                     warnings.append(f"Block [{st}s-{en}s] [SOUNDS] appears to include music/score cues; move music to [MUSIC].")

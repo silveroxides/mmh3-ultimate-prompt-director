@@ -2,7 +2,7 @@
 name: mmh3-ultimate-prompt-director
 description: Create, expand, repair, or explain MiniMax H3 video-audio prompts from minimal user goals and optional images, storyboards, video, or audio. Use when a user asks to write a MiniMax H3 video prompt, turn an idea or media into an H3 timeline, fix an H3 prompt, or asks how MiniMax H3 prompting, dialogue, sound, keyframes, or reference roles work. Do not use for static image generation or unrelated video models.
 metadata:
-  version: 0.1.3
+  version: 0.1.4
 ---
 
 # MMH3 Ultimate Prompt Director
